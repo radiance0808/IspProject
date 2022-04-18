@@ -2,6 +2,8 @@
 {
     public class Account
     {
+        public int idUser { get; set; }
+
         public User user { get; set; }
 
         public string login { get; set; }
@@ -12,6 +14,10 @@
 
         public DateTime createdAt { get; set; }
         public DateTime updatedAt { get; set; }
+
+        public int idPackage { get; set; }
+
+        public int idAdress { get; set; }
 
         public Package Package { get; set; }
 

@@ -17,6 +17,10 @@
 
         public DateTime updatedAt { get; set; }
 
+        public int idAdministrator { get; set; }
+
+        public int idUser { get; set; }
+
         public Administrator Administrator { get; set; }
         
         public Account account { get; set; }

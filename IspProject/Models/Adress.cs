@@ -7,6 +7,10 @@
 
         public string adress { get; set; }
 
+        public int idTypeOfHouse { get; set; }
+
         public TypeOfHouse typeOfHouse { get; set; }
+
+        public virtual ICollection<Account> Accounts { get; set; }
     }
 }
