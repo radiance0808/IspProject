@@ -16,10 +16,10 @@ namespace IspProject
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<IDbService, DbService>();
+            //services.AddScoped<IDbService, DbService>();
             services.AddDbContext<AccountDbContext>(opt =>
             {
-                opt.UseSqlServer("Data Source=db-mssql;Initial Catalog=s19230;Integrated Security=True");
+                opt.UseSqlServer("Server=tcp:ispproject.database.windows.net,1433;Initial Catalog=IspProjectDB;Persist Security Info=False;User ID=radyslavburylko;Password=ispproject_2022;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
             });
             services.AddControllers();
         }

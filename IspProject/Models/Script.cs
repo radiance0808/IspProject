@@ -6,7 +6,7 @@
 
         public string nameOfScript { get; set; }
 
-        public FileInfo scriptFile { get; set; } // find the better option
+        public string scriptFile { get; set; } // find the better option
 
         public DateTime createdAt { get; set; }
 
