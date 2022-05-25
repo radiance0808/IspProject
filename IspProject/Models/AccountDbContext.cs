@@ -4,6 +4,14 @@ namespace IspProject.Models
 {
     public class AccountDbContext : DbContext
     {
+
+        public AccountDbContext() { }
+
+        public AccountDbContext(DbContextOptions<AccountDbContext> options)
+            : base(options)
+        {
+
+        }
         public DbSet<Account> accounts { get; set; }
 
         public DbSet<Account_AdditionalService> account_AdditionalServices { get; set; }
@@ -28,13 +36,13 @@ namespace IspProject.Models
 
         public DbSet<User> users { get; set; }
 
-        public AccountDbContext() { }
+        public DbSet<Equipment> equipments { get; set; }
 
-        public AccountDbContext(DbContextOptions options)
-            : base(options)
-        {
+        public DbSet<PotentialClient> potentialClients { get; set; }
 
-        }
+        
+
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -74,7 +82,7 @@ namespace IspProject.Models
                 opt.Property(e => e.consumptedTraffic).IsRequired();
                 opt.Property(e => e.startTime).IsRequired();
                 opt.Property(e => e.endTime).IsRequired();
-                opt.HasOne(e => e.account).WithMany(e => e.Traffics).HasForeignKey(e => e.idUser);
+                opt.HasOne(e => e.account).WithMany(e => e.Traffics).HasForeignKey(e => e.idAccount);
 
 
             });
@@ -88,6 +96,24 @@ namespace IspProject.Models
 
             });
 
+            modelBuilder.Entity<Equipment>(opt =>
+            {
+                opt.HasKey(e => e.idEqupment);
+                opt.Property(e => e.idEqupment).ValueGeneratedOnAdd();
+                opt.Property(e => e.routerName).HasMaxLength(30).IsRequired();
+                opt.Property(e => e.description).HasMaxLength(200).IsRequired();
+                
+            });
+
+            modelBuilder.Entity<PotentialClient>(opt =>
+            {
+                opt.HasKey(e => e.idPotentialClient);
+                opt.Property(e => e.idPotentialClient).ValueGeneratedOnAdd();
+                opt.Property(e => e.name).HasMaxLength(20).IsRequired();
+                opt.Property(e => e.phoneNumber).HasMaxLength(20).IsRequired();
+                opt.HasOne(e => e.adress).WithMany(e => e.PotentialClients).HasForeignKey(e => e.idAdress);
+
+            });
 
             modelBuilder.Entity<AdditionalService>(opt =>
             {
@@ -115,14 +141,16 @@ namespace IspProject.Models
                 opt.Property(e => e.phoneNumber).HasMaxLength(10).IsRequired();
                 opt.Property(e => e.emailAdress).HasMaxLength(20).IsRequired();
                 opt.Property(e => e.passportId).HasMaxLength(10).IsRequired();
-
+                opt.HasOne(a => a.account).WithOne(b => b.user).HasForeignKey<Account>(e => e.idUser);
+                opt.HasOne(a => a.administrator).WithOne(b => b.User).HasForeignKey<Administrator>(e => e.idUser);
 
             });
 
             modelBuilder.Entity<Account>(opt =>
             {
-                opt.HasKey(e => e.idUser);
-                opt.Property(e => e.idUser).ValueGeneratedOnAdd();
+                opt.HasKey(e => e.idAccount);
+                opt.Property(e => e.idAccount).ValueGeneratedOnAdd();
+                opt.Property(e => e.idUser).IsRequired();
                 opt.Property(e => e.login).HasMaxLength(20).IsRequired();
                 opt.Property(e => e.password).HasMaxLength(30).IsRequired();
                 opt.Property(e => e.balance).IsRequired();
@@ -130,7 +158,8 @@ namespace IspProject.Models
                 opt.Property(e => e.updatedAt);
                 opt.HasOne(e => e.Package).WithMany(e => e.Accounts).HasForeignKey(e => e.idPackage);
                 opt.HasOne(e => e.Adress).WithMany(e => e.Accounts).HasForeignKey(e => e.idAdress);
-                opt.HasOne(e => e.user).WithOne(e => e.account).HasForeignKey<User>(e => e.idUser);
+                opt.HasOne(e => e.Equipment).WithMany(e => e.Accounts).HasForeignKey(e => e.idEquipment);
+                
 
 
 
@@ -138,8 +167,11 @@ namespace IspProject.Models
 
             modelBuilder.Entity<Administrator>(opt =>
             {
-                opt.HasKey(e => e.idUser);
-                opt.HasOne(e => e.User).WithOne(e => e.administrator).HasForeignKey<User>(e => e.idUser);
+                opt.HasKey(e => e.idAdministrator);
+                opt.Property(e => e.idAdministrator).ValueGeneratedOnAdd();
+                opt.Property(e => e.idUser).IsRequired();
+                opt.Property(e => e.login).HasMaxLength(20).IsRequired();
+                opt.Property(e => e.password).HasMaxLength(30).IsRequired();
 
 
             });
@@ -152,6 +184,7 @@ namespace IspProject.Models
 
             });
 
+            
             modelBuilder.Entity<SupportTicket>(opt =>
             {
                 opt.HasKey(e => e.idSupportTicket);
@@ -163,7 +196,7 @@ namespace IspProject.Models
                 opt.Property(e => e.isFinished).IsRequired();
                 opt.Property(e => e.updatedAt);
                 opt.HasOne(e => e.Administrator).WithMany(e => e.SupportTickets).HasForeignKey(e => e.idAdministrator);
-                opt.HasOne(e => e.account).WithMany(e => e.SupportTickets).HasForeignKey(e => e.idUser);
+                opt.HasOne(e => e.account).WithMany(e => e.SupportTickets).HasForeignKey(e => e.idAccount);
 
             });
 

@@ -24,11 +24,11 @@ namespace IspProject.Migrations
 
             modelBuilder.Entity("IspProject.Models.Account", b =>
                 {
-                    b.Property<int>("idUser")
+                    b.Property<int>("idAccount")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("idUser"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("idAccount"), 1L, 1);
 
                     b.Property<double>("balance")
                         .HasColumnType("float");
@@ -41,7 +41,13 @@ namespace IspProject.Migrations
                     b.Property<int>("idAdress")
                         .HasColumnType("int");
 
+                    b.Property<int>("idEquipment")
+                        .HasColumnType("int");
+
                     b.Property<int>("idPackage")
+                        .HasColumnType("int");
+
+                    b.Property<int>("idUser")
                         .HasColumnType("int");
 
                     b.Property<string>("login")
@@ -57,11 +63,16 @@ namespace IspProject.Migrations
                     b.Property<DateTime>("updatedAt")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("idUser");
+                    b.HasKey("idAccount");
 
                     b.HasIndex("idAdress");
 
+                    b.HasIndex("idEquipment");
+
                     b.HasIndex("idPackage");
+
+                    b.HasIndex("idUser")
+                        .IsUnique();
 
                     b.ToTable("accounts");
                 });
@@ -104,13 +115,29 @@ namespace IspProject.Migrations
 
             modelBuilder.Entity("IspProject.Models.Administrator", b =>
                 {
-                    b.Property<int>("idUser")
+                    b.Property<int>("idAdministrator")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("idUser"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("idAdministrator"), 1L, 1);
 
-                    b.HasKey("idUser");
+                    b.Property<int>("idUser")
+                        .HasColumnType("int");
+
+                    b.Property<string>("login")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("password")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.HasKey("idAdministrator");
+
+                    b.HasIndex("idUser")
+                        .IsUnique();
 
                     b.ToTable("administrators");
                 });
@@ -134,6 +161,29 @@ namespace IspProject.Migrations
                     b.ToTable("adresses");
                 });
 
+            modelBuilder.Entity("IspProject.Models.Equipment", b =>
+                {
+                    b.Property<int>("idEqupment")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("idEqupment"), 1L, 1);
+
+                    b.Property<string>("description")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("routerName")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.HasKey("idEqupment");
+
+                    b.ToTable("equipments");
+                });
+
             modelBuilder.Entity("IspProject.Models.Package", b =>
                 {
                     b.Property<int>("idPackage")
@@ -153,6 +203,34 @@ namespace IspProject.Migrations
                     b.HasKey("idPackage");
 
                     b.ToTable("packages");
+                });
+
+            modelBuilder.Entity("IspProject.Models.PotentialClient", b =>
+                {
+                    b.Property<int>("idPotentialClient")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("idPotentialClient"), 1L, 1);
+
+                    b.Property<int>("idAdress")
+                        .HasColumnType("int");
+
+                    b.Property<string>("name")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("phoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.HasKey("idPotentialClient");
+
+                    b.HasIndex("idAdress");
+
+                    b.ToTable("potentialClients");
                 });
 
             modelBuilder.Entity("IspProject.Models.Script", b =>
@@ -211,10 +289,10 @@ namespace IspProject.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("getdate()");
 
-                    b.Property<int>("idAdministrator")
+                    b.Property<int?>("idAccount")
                         .HasColumnType("int");
 
-                    b.Property<int>("idUser")
+                    b.Property<int?>("idAdministrator")
                         .HasColumnType("int");
 
                     b.Property<bool>("isFinished")
@@ -240,9 +318,9 @@ namespace IspProject.Migrations
 
                     b.HasKey("idSupportTicket");
 
-                    b.HasIndex("idAdministrator");
+                    b.HasIndex("idAccount");
 
-                    b.HasIndex("idUser");
+                    b.HasIndex("idAdministrator");
 
                     b.ToTable("supportTickets");
                 });
@@ -266,7 +344,7 @@ namespace IspProject.Migrations
                     b.Property<DateTime>("endTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("idUser")
+                    b.Property<int>("idAccount")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("startTime")
@@ -274,7 +352,7 @@ namespace IspProject.Migrations
 
                     b.HasKey("idTraffic");
 
-                    b.HasIndex("idUser");
+                    b.HasIndex("idAccount");
 
                     b.ToTable("traffics");
                 });
@@ -302,6 +380,8 @@ namespace IspProject.Migrations
                     b.Property<int>("idUser")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("idUser"), 1L, 1);
 
                     b.Property<string>("emailAdress")
                         .IsRequired()
@@ -341,15 +421,31 @@ namespace IspProject.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("IspProject.Models.Equipment", "Equipment")
+                        .WithMany("Accounts")
+                        .HasForeignKey("idEquipment")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("IspProject.Models.Package", "Package")
                         .WithMany("Accounts")
                         .HasForeignKey("idPackage")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("IspProject.Models.User", "user")
+                        .WithOne("account")
+                        .HasForeignKey("IspProject.Models.Account", "idUser")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Adress");
 
+                    b.Navigation("Equipment");
+
                     b.Navigation("Package");
+
+                    b.Navigation("user");
                 });
 
             modelBuilder.Entity("IspProject.Models.Account_AdditionalService", b =>
@@ -371,6 +467,17 @@ namespace IspProject.Migrations
                     b.Navigation("account");
                 });
 
+            modelBuilder.Entity("IspProject.Models.Administrator", b =>
+                {
+                    b.HasOne("IspProject.Models.User", "User")
+                        .WithOne("administrator")
+                        .HasForeignKey("IspProject.Models.Administrator", "idUser")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("IspProject.Models.Adress", b =>
                 {
                     b.HasOne("IspProject.Models.TypeOfHouse", "typeOfHouse")
@@ -380,6 +487,17 @@ namespace IspProject.Migrations
                         .IsRequired();
 
                     b.Navigation("typeOfHouse");
+                });
+
+            modelBuilder.Entity("IspProject.Models.PotentialClient", b =>
+                {
+                    b.HasOne("IspProject.Models.Adress", "adress")
+                        .WithMany("PotentialClients")
+                        .HasForeignKey("idAdress")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("adress");
                 });
 
             modelBuilder.Entity("IspProject.Models.Script_AdditionalService", b =>
@@ -403,17 +521,13 @@ namespace IspProject.Migrations
 
             modelBuilder.Entity("IspProject.Models.SupportTicket", b =>
                 {
-                    b.HasOne("IspProject.Models.Administrator", "Administrator")
-                        .WithMany("SupportTickets")
-                        .HasForeignKey("idAdministrator")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("IspProject.Models.Account", "account")
                         .WithMany("SupportTickets")
-                        .HasForeignKey("idUser")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("idAccount");
+
+                    b.HasOne("IspProject.Models.Administrator", "Administrator")
+                        .WithMany("SupportTickets")
+                        .HasForeignKey("idAdministrator");
 
                     b.Navigation("Administrator");
 
@@ -424,30 +538,11 @@ namespace IspProject.Migrations
                 {
                     b.HasOne("IspProject.Models.Account", "account")
                         .WithMany("Traffics")
-                        .HasForeignKey("idUser")
+                        .HasForeignKey("idAccount")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("account");
-                });
-
-            modelBuilder.Entity("IspProject.Models.User", b =>
-                {
-                    b.HasOne("IspProject.Models.Account", "account")
-                        .WithOne("user")
-                        .HasForeignKey("IspProject.Models.User", "idUser")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("IspProject.Models.Administrator", "administrator")
-                        .WithOne("User")
-                        .HasForeignKey("IspProject.Models.User", "idUser")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("account");
-
-                    b.Navigation("administrator");
                 });
 
             modelBuilder.Entity("IspProject.Models.Account", b =>
@@ -457,9 +552,6 @@ namespace IspProject.Migrations
                     b.Navigation("SupportTickets");
 
                     b.Navigation("Traffics");
-
-                    b.Navigation("user")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("IspProject.Models.AdditionalService", b =>
@@ -472,12 +564,16 @@ namespace IspProject.Migrations
             modelBuilder.Entity("IspProject.Models.Administrator", b =>
                 {
                     b.Navigation("SupportTickets");
-
-                    b.Navigation("User")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("IspProject.Models.Adress", b =>
+                {
+                    b.Navigation("Accounts");
+
+                    b.Navigation("PotentialClients");
+                });
+
+            modelBuilder.Entity("IspProject.Models.Equipment", b =>
                 {
                     b.Navigation("Accounts");
                 });
@@ -495,6 +591,15 @@ namespace IspProject.Migrations
             modelBuilder.Entity("IspProject.Models.TypeOfHouse", b =>
                 {
                     b.Navigation("Adresses");
+                });
+
+            modelBuilder.Entity("IspProject.Models.User", b =>
+                {
+                    b.Navigation("account")
+                        .IsRequired();
+
+                    b.Navigation("administrator")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

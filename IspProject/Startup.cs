@@ -19,7 +19,7 @@ namespace IspProject
             //services.AddScoped<IDbService, DbService>();
             services.AddDbContext<AccountDbContext>(opt =>
             {
-                opt.UseSqlServer("Server=tcp:ispproject.database.windows.net,1433;Initial Catalog=IspProjectDB;Persist Security Info=False;User ID=radyslavburylko;Password=ispproject_2022;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+                opt.UseSqlServer("Server=tcp:ispproject.database.windows.net,1433;Initial Catalog=IspProject;Persist Security Info=False;User ID=radyslavburylko;Password=ispproject_2022;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
             });
             services.AddControllers();
         }

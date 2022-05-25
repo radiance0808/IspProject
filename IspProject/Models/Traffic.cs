@@ -11,7 +11,7 @@
         public DateTime startTime { get; set; }
         public DateTime endTime { get; set; }
 
-        public int idUser;
+        public int idAccount;
 
         public Account account;
 

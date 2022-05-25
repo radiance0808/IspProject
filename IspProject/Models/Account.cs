@@ -2,6 +2,8 @@
 {
     public class Account
     {
+
+        public int idAccount { get; set; }
         public int idUser { get; set; }
 
         public User user { get; set; }
@@ -22,6 +24,10 @@
         public Package Package { get; set; }
 
         public Adress Adress { get; set; }
+
+        public int idEquipment { get; set; }
+        
+        public Equipment Equipment { get; set; }
 
         public virtual ICollection<Traffic> Traffics { get; set; }
 

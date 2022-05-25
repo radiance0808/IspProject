@@ -12,5 +12,6 @@
         public TypeOfHouse typeOfHouse { get; set; }
 
         public virtual ICollection<Account> Accounts { get; set; }
+        public virtual ICollection<PotentialClient> PotentialClients { get; set; }
     }
 }

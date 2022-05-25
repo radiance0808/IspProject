@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace IspProject.Migrations
 {
-    public partial class ispproject : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -24,15 +24,17 @@ namespace IspProject.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "administrators",
+                name: "equipments",
                 columns: table => new
                 {
-                    idUser = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1")
+                    idEqupment = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    routerName = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_administrators", x => x.idUser);
+                    table.PrimaryKey("PK_equipments", x => x.idEqupment);
                 });
 
             migrationBuilder.CreateTable(
@@ -75,6 +77,23 @@ namespace IspProject.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_typeHouses", x => x.idTypeOfHouse);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "users",
+                columns: table => new
+                {
+                    idUser = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    firstName = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    lastName = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    phoneNumber = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
+                    emailAdress = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    passportId = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_users", x => x.idUser);
                 });
 
             migrationBuilder.CreateTable(
@@ -121,22 +140,45 @@ namespace IspProject.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "administrators",
+                columns: table => new
+                {
+                    idAdministrator = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    idUser = table.Column<int>(type: "int", nullable: false),
+                    login = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    password = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_administrators", x => x.idAdministrator);
+                    table.ForeignKey(
+                        name: "FK_administrators_users_idUser",
+                        column: x => x.idUser,
+                        principalTable: "users",
+                        principalColumn: "idUser",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "accounts",
                 columns: table => new
                 {
-                    idUser = table.Column<int>(type: "int", nullable: false)
+                    idAccount = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    idUser = table.Column<int>(type: "int", nullable: false),
                     login = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     password = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     balance = table.Column<double>(type: "float", nullable: false),
                     createdAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()"),
                     updatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     idPackage = table.Column<int>(type: "int", nullable: false),
-                    idAdress = table.Column<int>(type: "int", nullable: false)
+                    idAdress = table.Column<int>(type: "int", nullable: false),
+                    idEquipment = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_accounts", x => x.idUser);
+                    table.PrimaryKey("PK_accounts", x => x.idAccount);
                     table.ForeignKey(
                         name: "FK_accounts_adresses_idAdress",
                         column: x => x.idAdress,
@@ -144,10 +186,43 @@ namespace IspProject.Migrations
                         principalColumn: "idAdress",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
+                        name: "FK_accounts_equipments_idEquipment",
+                        column: x => x.idEquipment,
+                        principalTable: "equipments",
+                        principalColumn: "idEqupment",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_accounts_packages_idPackage",
                         column: x => x.idPackage,
                         principalTable: "packages",
                         principalColumn: "idPackage",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_accounts_users_idUser",
+                        column: x => x.idUser,
+                        principalTable: "users",
+                        principalColumn: "idUser",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "potentialClients",
+                columns: table => new
+                {
+                    idPotentialClient = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    phoneNumber = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    idAdress = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_potentialClients", x => x.idPotentialClient);
+                    table.ForeignKey(
+                        name: "FK_potentialClients_adresses_idAdress",
+                        column: x => x.idAdress,
+                        principalTable: "adresses",
+                        principalColumn: "idAdress",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -165,7 +240,7 @@ namespace IspProject.Migrations
                         name: "FK_account_AdditionalServices_accounts_idAccount",
                         column: x => x.idAccount,
                         principalTable: "accounts",
-                        principalColumn: "idUser",
+                        principalColumn: "idAccount",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_account_AdditionalServices_additionalServices_idAdditionalService",
@@ -187,24 +262,22 @@ namespace IspProject.Migrations
                     status = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     isFinished = table.Column<bool>(type: "bit", nullable: false),
                     updatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    idAdministrator = table.Column<int>(type: "int", nullable: false),
-                    idUser = table.Column<int>(type: "int", nullable: false)
+                    idAdministrator = table.Column<int>(type: "int", nullable: true),
+                    idAccount = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_supportTickets", x => x.idSupportTicket);
                     table.ForeignKey(
-                        name: "FK_supportTickets_accounts_idUser",
-                        column: x => x.idUser,
+                        name: "FK_supportTickets_accounts_idAccount",
+                        column: x => x.idAccount,
                         principalTable: "accounts",
-                        principalColumn: "idUser",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "idAccount");
                     table.ForeignKey(
                         name: "FK_supportTickets_administrators_idAdministrator",
                         column: x => x.idAdministrator,
                         principalTable: "administrators",
-                        principalColumn: "idUser",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "idAdministrator");
                 });
 
             migrationBuilder.CreateTable(
@@ -217,44 +290,16 @@ namespace IspProject.Migrations
                     consumptedTraffic = table.Column<double>(type: "float", nullable: false),
                     startTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     endTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    idUser = table.Column<int>(type: "int", nullable: false)
+                    idAccount = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_traffics", x => x.idTraffic);
                     table.ForeignKey(
-                        name: "FK_traffics_accounts_idUser",
-                        column: x => x.idUser,
+                        name: "FK_traffics_accounts_idAccount",
+                        column: x => x.idAccount,
                         principalTable: "accounts",
-                        principalColumn: "idUser",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "users",
-                columns: table => new
-                {
-                    idUser = table.Column<int>(type: "int", nullable: false),
-                    firstName = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
-                    lastName = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
-                    phoneNumber = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
-                    emailAdress = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    passportId = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_users", x => x.idUser);
-                    table.ForeignKey(
-                        name: "FK_users_accounts_idUser",
-                        column: x => x.idUser,
-                        principalTable: "accounts",
-                        principalColumn: "idUser",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_users_administrators_idUser",
-                        column: x => x.idUser,
-                        principalTable: "administrators",
-                        principalColumn: "idUser",
+                        principalColumn: "idAccount",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -269,9 +314,31 @@ namespace IspProject.Migrations
                 column: "idAdress");
 
             migrationBuilder.CreateIndex(
+                name: "IX_accounts_idEquipment",
+                table: "accounts",
+                column: "idEquipment");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_accounts_idPackage",
                 table: "accounts",
                 column: "idPackage");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_accounts_idUser",
+                table: "accounts",
+                column: "idUser",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_administrators_idUser",
+                table: "administrators",
+                column: "idUser",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_potentialClients_idAdress",
+                table: "potentialClients",
+                column: "idAdress");
 
             migrationBuilder.CreateIndex(
                 name: "IX_script_additionalServices_idAdditionalService",
@@ -279,25 +346,28 @@ namespace IspProject.Migrations
                 column: "idAdditionalService");
 
             migrationBuilder.CreateIndex(
+                name: "IX_supportTickets_idAccount",
+                table: "supportTickets",
+                column: "idAccount");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_supportTickets_idAdministrator",
                 table: "supportTickets",
                 column: "idAdministrator");
 
             migrationBuilder.CreateIndex(
-                name: "IX_supportTickets_idUser",
-                table: "supportTickets",
-                column: "idUser");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_traffics_idUser",
+                name: "IX_traffics_idAccount",
                 table: "traffics",
-                column: "idUser");
+                column: "idAccount");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
                 name: "account_AdditionalServices");
+
+            migrationBuilder.DropTable(
+                name: "potentialClients");
 
             migrationBuilder.DropTable(
                 name: "script_additionalServices");
@@ -309,25 +379,28 @@ namespace IspProject.Migrations
                 name: "traffics");
 
             migrationBuilder.DropTable(
-                name: "users");
-
-            migrationBuilder.DropTable(
                 name: "additionalServices");
 
             migrationBuilder.DropTable(
                 name: "scripts");
 
             migrationBuilder.DropTable(
-                name: "accounts");
+                name: "administrators");
 
             migrationBuilder.DropTable(
-                name: "administrators");
+                name: "accounts");
 
             migrationBuilder.DropTable(
                 name: "adresses");
 
             migrationBuilder.DropTable(
+                name: "equipments");
+
+            migrationBuilder.DropTable(
                 name: "packages");
+
+            migrationBuilder.DropTable(
+                name: "users");
 
             migrationBuilder.DropTable(
                 name: "typeHouses");
