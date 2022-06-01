@@ -1,22 +1,50 @@
-import React, { Component } from 'react';
-import { Route } from 'react-router';
-import { Layout } from './components/Layout';
-import { Home } from './components/Home';
-import { FetchData } from './components/FetchData';
-import { Counter } from './components/Counter';
+import React, { useContext } from "react";
+import { Switch, Route, Redirect } from "react-router-dom";
+import { Fragment } from "react/cjs/react.development";
+import "./App.css";
+import AdminLoginPage from "./components/pages/AdminLoginPage";
+import HomePage from "./components/pages/HomePage";
+import LoginPage from "./components/pages/LoginPage";
+import UserPage from "./components/pages/UserPage";
+import AuthContext from "./components/store/AuthContext";
 
-import './custom.css'
+import Layout from "./components/UI/Helpers/Layout/Layout";
+import Profile from "./components/UI/UserProfile/Profile/Profile";
+import Statistics from "./components/UI/UserProfile/Statistics/Statistics";
 
-export default class App extends Component {
-  static displayName = App.name;
+function App() {
+  const authCtx = useContext(AuthContext);
 
-  render () {
-    return (
-      <Layout>
-        <Route exact path='/' component={Home} />
-        <Route path='/counter' component={Counter} />
-        <Route path='/fetch-data' component={FetchData} />
-      </Layout>
-    );
-  }
+  return (
+    <Fragment>
+      <Switch>
+        <Route path="/admin" exact>
+          <AdminLoginPage />
+        </Route>
+        <Layout>
+          <Route path="/" exact>
+            <HomePage />
+          </Route>
+          {!authCtx.isLogged && (
+            <Route path="/login">
+              <LoginPage />
+            </Route>
+          )}
+          <Route path="/profile" exact>
+            {!authCtx.isLogged && <Redirect to="/login" />}
+            {authCtx.isLogged && <UserPage />}
+          </Route>
+          <Route path="/profile/statistics" exact>
+            {!authCtx.isLogged && <Redirect to="/login" />}
+            {authCtx.isLogged && <Statistics />}
+          </Route>
+          <Route path="*">
+            <Redirect to="/"/>
+          </Route>
+        </Layout>
+      </Switch>
+    </Fragment>
+  );
 }
+
+export default App;
