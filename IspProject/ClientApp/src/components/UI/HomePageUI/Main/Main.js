@@ -1,10 +1,11 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useContext } from "react";
 import classes from "./Main.module.css";
 import star from "../../../../gallery/star.svg";
 import chat from "../../../../gallery/chat.svg";
 import man from "../../../../gallery/man.svg";
 import Form from "../Form/Form";
 import Tariffs from "../Plans/Tariffs";
+import TariffContext from "../../../store/TariffContext";
 
 const DUMMY_TARIFFS = [
   {
@@ -25,7 +26,9 @@ const DUMMY_TARIFFS = [
 ];
 
 const Main = () => {
-  const [packages, setPackages] = useState(DUMMY_TARIFFS);
+
+  const tariffCtx = useContext(TariffContext);
+  const [packages, setPackages] = useState(tariffCtx.tariffs);
 
   return (
     <Fragment>
