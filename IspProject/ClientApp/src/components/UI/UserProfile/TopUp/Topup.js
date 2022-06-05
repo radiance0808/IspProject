@@ -1,8 +1,21 @@
 import React from "react";
+import { useState, useContext } from "react/cjs/react.development";
+import UserContext from "../../../store/UserContext";
 
 import classes from "./Topup.module.css";
 
 const Topup = () => {
+  const userCtx = useContext(UserContext);
+
+  const [balance, setBalance] = useState(userCtx.balance);
+  const [topup, setTopup] = useState();
+
+  const paymentSubmitHandler = (event) => {
+    event.preventDefault();
+    setBalance(balance + topup);
+    console.log(userCtx.balance);
+  };
+
   return (
     <div className={classes.general}>
       <div className={classes.wrapper}>
@@ -16,8 +29,9 @@ const Topup = () => {
               id="amount"
               placeholder="Enter amount"
               pattern="[0-9]*"
+              value={topup}
             />
-            <button>Pay</button>
+            <button onClick={paymentSubmitHandler}>Pay</button>
           </div>
         </form>
       </div>
