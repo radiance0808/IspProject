@@ -30,6 +30,11 @@ namespace IspProject.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("idAccount"), 1L, 1);
 
+                    b.Property<string>("NotificationType")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.Property<double>("balance")
                         .HasColumnType("float");
 
@@ -203,6 +208,30 @@ namespace IspProject.Migrations
                     b.HasKey("idPackage");
 
                     b.ToTable("packages");
+                });
+
+            modelBuilder.Entity("IspProject.Models.Payment", b =>
+                {
+                    b.Property<int>("idPayment")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("idPayment"), 1L, 1);
+
+                    b.Property<double>("ammount")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("idAccount")
+                        .HasColumnType("int");
+
+                    b.HasKey("idPayment");
+
+                    b.HasIndex("idAccount");
+
+                    b.ToTable("payments");
                 });
 
             modelBuilder.Entity("IspProject.Models.PotentialClient", b =>
@@ -489,6 +518,17 @@ namespace IspProject.Migrations
                     b.Navigation("typeOfHouse");
                 });
 
+            modelBuilder.Entity("IspProject.Models.Payment", b =>
+                {
+                    b.HasOne("IspProject.Models.Account", "account")
+                        .WithMany("Payments")
+                        .HasForeignKey("idAccount")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("account");
+                });
+
             modelBuilder.Entity("IspProject.Models.PotentialClient", b =>
                 {
                     b.HasOne("IspProject.Models.Adress", "adress")
@@ -548,6 +588,8 @@ namespace IspProject.Migrations
             modelBuilder.Entity("IspProject.Models.Account", b =>
                 {
                     b.Navigation("Account_AdditionalServices");
+
+                    b.Navigation("Payments");
 
                     b.Navigation("SupportTickets");
 

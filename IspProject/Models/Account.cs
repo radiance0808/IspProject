@@ -29,11 +29,14 @@
         
         public Equipment Equipment { get; set; }
 
+        public NotificationType NotificationType { get; set; }
+
         public virtual ICollection<Traffic> Traffics { get; set; }
 
         public virtual ICollection<Account_AdditionalService> Account_AdditionalServices { get; set; }
 
         public virtual ICollection<SupportTicket> SupportTickets { get; set; }
+        public virtual ICollection<Payment> Payments { get; set; }
 
 
 

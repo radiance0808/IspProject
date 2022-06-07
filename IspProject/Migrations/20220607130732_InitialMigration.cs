@@ -1,11 +1,11 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
+
 
 #nullable disable
 
 namespace IspProject.Migrations
 {
-    public partial class Initial : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -174,7 +174,8 @@ namespace IspProject.Migrations
                     updatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     idPackage = table.Column<int>(type: "int", nullable: false),
                     idAdress = table.Column<int>(type: "int", nullable: false),
-                    idEquipment = table.Column<int>(type: "int", nullable: false)
+                    idEquipment = table.Column<int>(type: "int", nullable: false),
+                    NotificationType = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -247,6 +248,27 @@ namespace IspProject.Migrations
                         column: x => x.idAdditionalService,
                         principalTable: "additionalServices",
                         principalColumn: "idAdditionalService",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "payments",
+                columns: table => new
+                {
+                    idPayment = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ammount = table.Column<double>(type: "float", nullable: false),
+                    date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    idAccount = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_payments", x => x.idPayment);
+                    table.ForeignKey(
+                        name: "FK_payments_accounts_idAccount",
+                        column: x => x.idAccount,
+                        principalTable: "accounts",
+                        principalColumn: "idAccount",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -336,6 +358,11 @@ namespace IspProject.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_payments_idAccount",
+                table: "payments",
+                column: "idAccount");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_potentialClients_idAdress",
                 table: "potentialClients",
                 column: "idAdress");
@@ -365,6 +392,9 @@ namespace IspProject.Migrations
         {
             migrationBuilder.DropTable(
                 name: "account_AdditionalServices");
+
+            migrationBuilder.DropTable(
+                name: "payments");
 
             migrationBuilder.DropTable(
                 name: "potentialClients");

@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using IspProject.Models;
+using IspProject.DTOs;
+using AutoMapper;
 
 namespace IspProject.Controllers
 {
@@ -14,21 +16,25 @@ namespace IspProject.Controllers
     public class UserController : ControllerBase
     {
         private readonly AccountDbContext _context;
+        private readonly IMapper _mapper;
 
-        public UserController(AccountDbContext context)
+        public UserController(AccountDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         // GET: api/User
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> Getusers()
+        public async Task<ActionResult<IEnumerable<UserDTO>>> Getusers()
         {
           if (_context.users == null)
           {
               return NotFound();
           }
-            return await _context.users.ToListAsync();
+            var users = await _context.users.ToListAsync();
+            return _mapper.Map<List<UserDTO>>(users);
+            
         }
 
         // GET: api/User/5
@@ -83,12 +89,13 @@ namespace IspProject.Controllers
         // POST: api/User
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User user)
+        public async Task<ActionResult<User>> PostUser(UserCreationDTO userCreationDTO)
         {
           if (_context.users == null)
           {
               return Problem("Entity set 'AccountDbContext.users'  is null.");
           }
+          var user = _mapper.Map<User>(userCreationDTO);
             _context.users.Add(user);
             await _context.SaveChangesAsync();
 

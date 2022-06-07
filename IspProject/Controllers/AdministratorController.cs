@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using IspProject.Models;
+using IspProject.Services;
 
 namespace IspProject.Controllers
 {
@@ -14,6 +15,10 @@ namespace IspProject.Controllers
     public class AdministratorController : ControllerBase
     {
         private readonly AccountDbContext _context;
+
+        private readonly IJWTManagerRepository _jWTManager;
+
+
 
         public AdministratorController(AccountDbContext context)
         {

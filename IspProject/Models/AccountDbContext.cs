@@ -39,6 +39,7 @@ namespace IspProject.Models
         public DbSet<Equipment> equipments { get; set; }
 
         public DbSet<PotentialClient> potentialClients { get; set; }
+        public DbSet<Payment> payments { get; set; }
 
         
 
@@ -83,6 +84,17 @@ namespace IspProject.Models
                 opt.Property(e => e.startTime).IsRequired();
                 opt.Property(e => e.endTime).IsRequired();
                 opt.HasOne(e => e.account).WithMany(e => e.Traffics).HasForeignKey(e => e.idAccount);
+
+
+            });
+
+            modelBuilder.Entity<Payment>(opt =>
+            {
+                opt.HasKey(e => e.idPayment);
+                opt.Property(e => e.idPayment).ValueGeneratedOnAdd();
+                opt.Property(e => e.ammount).IsRequired();
+                opt.Property(e => e.date).IsRequired();
+                opt.HasOne(e => e.account).WithMany(e => e.Payments).HasForeignKey(e => e.idAccount);
 
 
             });
@@ -156,6 +168,8 @@ namespace IspProject.Models
                 opt.Property(e => e.balance).IsRequired();
                 opt.Property(e => e.createdAt).HasDefaultValueSql("getdate()");
                 opt.Property(e => e.updatedAt);
+                opt.Property(e => e.NotificationType).HasConversion<string>().HasMaxLength(50);
+
                 opt.HasOne(e => e.Package).WithMany(e => e.Accounts).HasForeignKey(e => e.idPackage);
                 opt.HasOne(e => e.Adress).WithMany(e => e.Accounts).HasForeignKey(e => e.idAdress);
                 opt.HasOne(e => e.Equipment).WithMany(e => e.Accounts).HasForeignKey(e => e.idEquipment);
