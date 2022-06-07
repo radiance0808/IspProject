@@ -1,7 +1,10 @@
-import React, {useState } from 'react';
+import React, {useState, useContext } from 'react';
 import classes from "./Form.module.css";
 import useInput from "../../../hooks/use-input-form";
 import ErrorHandlerModal from "../../Helpers/ErrorHandler/ErrorHandlerModal";
+
+import TariffContext from '../../../store/TariffContext';
+
 
 const Form = () => {
   const [enteredPlan, setEnteredPlan] = useState(null);
@@ -10,6 +13,8 @@ const Form = () => {
   const [enteredHouseTypeIsValid, setEnteredHouseTypeIsValid] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+
+  const tariffCtx = useContext(TariffContext);
 
   let formIsValid = false;
 
@@ -75,6 +80,7 @@ const Form = () => {
     event.preventDefault();
     if (!formIsValid) {
       setShowErrorModal(true);
+      console.log(tariffCtx.tariffs);
     }
 
     if (formIsValid) {
@@ -226,37 +232,20 @@ const Form = () => {
             {addressHasError && <p>Please provide correct address.</p>}
           </div>
         </div>
-        <div className={classes.form__radio}>
-          <input
-            id="basic"
-            type="radio"
-            name="package"
-            value="basic"
-            onChange={planChangeHandler}
-          />
-          <label htmlFor="basic">Basic</label>
-        </div>
 
-        <div className={classes.form__radio}>
+        {tariffCtx.tariffs.map((tariff)=>(
+          <div className={classes.form__radio}>
           <input
-            id="pro"
+            id={tariff.name}
             type="radio"
             name="package"
-            value="pro"
+            value={tariff.name}
             onChange={planChangeHandler}
           />
-          <label htmlFor="pro">Pro</label>
+          <label htmlFor="enterprise">{tariff.name}</label>
         </div>
-        <div className={classes.form__radio}>
-          <input
-            id="enterprise"
-            type="radio"
-            name="package"
-            value="enterprise"
-            onChange={planChangeHandler}
-          />
-          <label htmlFor="enterprise">Enterprise</label>
-        </div>
+        ))}
+        
         <div className={classes.form__submit}>
           <button onClick={formSubmitHandler}>Submit</button>
         </div>
