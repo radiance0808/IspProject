@@ -19,6 +19,12 @@ namespace IspProject
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
+
+
+
+
+
             /*services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -58,6 +64,12 @@ namespace IspProject
             {
                 app.UseDeveloperExceptionPage();
             }
+            
+            app.UseCors(builder => builder
+   .AllowAnyOrigin()
+   .AllowAnyMethod()
+   .AllowAnyHeader()
+   .AllowCredentials());
 
             app.UseHttpsRedirection();
 

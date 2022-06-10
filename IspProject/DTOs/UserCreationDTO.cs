@@ -1,4 +1,6 @@
-﻿namespace IspProject.DTOs
+﻿using IspProject.Models;
+
+namespace IspProject.DTOs
 {
     public class UserCreationDTO
     {
@@ -11,6 +13,10 @@
         public string emailAdress { get; set; }
 
         public string passportId { get; set; }
+
+        public Account account { get; set; }
+
+        public Administrator administrator { get; set; }
 
     }
 }
