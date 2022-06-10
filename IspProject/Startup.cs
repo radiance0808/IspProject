@@ -26,20 +26,11 @@ namespace IspProject
 
             services.AddCors(options =>
             {
-                options.AddPolicy("CorsPolicy",
-                    builder => builder
-                    .AllowAnyOrigin()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader()
-                    );
-
-                options.AddPolicy("signalr",
-                    builder => builder
-                    .AllowAnyMethod()
-                    .AllowAnyHeader()
-
-                    .AllowCredentials()
-                    .SetIsOriginAllowed(hostName => true));
+                options.AddDefaultPolicy(builder =>
+            builder.SetIsOriginAllowed(_ => true)
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials());
             });
             
 
@@ -88,7 +79,7 @@ namespace IspProject
 
             app.UseRouting();
 
-            app.UseCors(CorsPolicy);
+            app.UseCors();
 
             app.UseAuthentication();
 
