@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 
+
 namespace IspProject
 {
     public class Startup
@@ -16,12 +17,24 @@ namespace IspProject
 
         public IConfiguration Configuration { get; }
 
+        readonly string CorsPolicy = "_corsPolicy";
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors();
 
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: CorsPolicy,
+                                  builder =>
+                                  {
+                                      builder.AllowAnyOrigin()
+                                       .AllowAnyMethod()
+                                       .AllowAnyHeader()
+                                       .AllowCredentials();
+                                  });
+            });
 
 
 
@@ -65,15 +78,11 @@ namespace IspProject
                 app.UseDeveloperExceptionPage();
             }
             
-            app.UseCors(builder => builder
-   .AllowAnyOrigin()
-   .AllowAnyMethod()
-   .AllowAnyHeader()
-   .AllowCredentials());
-
-            app.UseHttpsRedirection();
+           app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(CorsPolicy);
 
             app.UseAuthentication();
 
