@@ -27,6 +27,21 @@ const DUMMY_TARIFFS = [
 
 const Main = () => {
 
+  const axios = require('axios').default;
+
+  axios.get('https://localhost:7012/api/User')
+  .then(function(response){
+    console.log(response.data);
+  })
+  .catch(function (error) {
+    // handle error
+    console.log(error);
+  })
+  .then(function () {
+    // always executed
+  });
+
+  
   const tariffCtx = useContext(TariffContext);
   const [packages, setPackages] = useState(tariffCtx.tariffs);
 
