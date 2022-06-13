@@ -240,7 +240,7 @@ const Form = (props) => {
             value={tariff.name}
             onChange={planChangeHandler}
           />
-          <label htmlFor="enterprise">{tariff.name}</label>
+          <label htmlFor={tariff.nameOfPackage}>{tariff.nameOfPackage}</label>
         </div>
         ))}
         

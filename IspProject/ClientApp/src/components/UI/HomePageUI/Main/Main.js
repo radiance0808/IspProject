@@ -44,8 +44,8 @@ const Main = () => {
       for (const key in responseData) {
         loadedTariffs.push({
           id: key,
-          tariff_id: responseData[key].tariff_id,
-          name: responseData[key].name,
+          tariff_id: responseData[key].idPackage,
+          nameOfPackage: responseData[key].nameOfPackage,
           price: responseData[key].price,
         });
       }

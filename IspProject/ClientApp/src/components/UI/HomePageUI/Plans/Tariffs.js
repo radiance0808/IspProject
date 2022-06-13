@@ -4,6 +4,7 @@ import Tariff from "./Tariff";
 import classes from "./Tariffs.module.css";
 
 const Tariffs = (props) => {
+  console.log(props.tariffs);
   return (
     <div>
       <section className={classes.plans} href="#plans" id="plans">
