@@ -15,9 +15,9 @@ function removeFirstWord(str) {
 const Tariff = (props) => {
   return (
     <div className={classes.card}>
-      <h1>{props.name}</h1>
+      <h1>{props.nameOfPackage}</h1>
       <p className={classes.price}>{props.price} zl/month</p>
-      <b className={classes.speed}>{removeFirstWord(props.name)} MBit/s</b>
+      <b className={classes.speed}>{props.nameOfPackage} MBit/s</b>
 
       <p>
         <button

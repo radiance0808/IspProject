@@ -6,7 +6,7 @@ import ErrorHandlerModal from "../Helpers/ErrorHandler/ErrorHandlerModal";
 
 const Login = () => {
   const history = useHistory();
-  const emailInputRef = useRef();
+  const loginInputRef = useRef();
   const passwordInputRef = useRef();
 
   const authCtx = useContext(AuthContext);
@@ -21,10 +21,10 @@ const Login = () => {
 
   const submitLoginHandler = (event) => {
     event.preventDefault();
-    const enteredEmail = emailInputRef.current.value;
+    const enteredLogin = loginInputRef.current.value;
     const enteredPassword = passwordInputRef.current.value;
 
-    console.log(enteredEmail);
+    console.log(enteredLogin);
     console.log(enteredPassword);
 
     setIsLoading(true);
@@ -35,7 +35,7 @@ const Login = () => {
     fetch(url, {
       method: "POST",
       body: JSON.stringify({
-        email: enteredEmail,
+        email: enteredLogin, //later should be done with login, that's why variable name is different
         password: enteredPassword,
         returnSecureToken: true,
         //secureToken
@@ -67,6 +67,8 @@ const Login = () => {
         setIsError(true);
         setIsLoading(false);
       });
+
+    
   };
 
   return (
@@ -85,10 +87,10 @@ const Login = () => {
               <div className={classes.login__item}>
                 <h4>Email</h4>
                 <input
-                  name="email"
+                  name="login"
                   placeholder="email@example.com"
                   type="text"
-                  ref={emailInputRef}
+                  ref={loginInputRef}
                   required
                 ></input>
               </div>
