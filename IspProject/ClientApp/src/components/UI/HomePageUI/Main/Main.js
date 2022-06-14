@@ -1,11 +1,11 @@
-import React, { Fragment, useState, useContext } from "react";
+import React, { Fragment, useState, useContext, useEffect } from "react";
 import classes from "./Main.module.css";
 import star from "../../../../gallery/star.svg";
 import chat from "../../../../gallery/chat.svg";
 import man from "../../../../gallery/man.svg";
 import Form from "../Form/Form";
 import Tariffs from "../Plans/Tariffs";
-import TariffContext from "../../../store/TariffContext";
+import axios from "axios";
 
 const DUMMY_TARIFFS = [
   {
@@ -25,25 +25,49 @@ const DUMMY_TARIFFS = [
   },
 ];
 
+
 const Main = () => {
+  const [packages, setPackages] = useState([]);
+  const [typeOfHouses, setTypeOfHouses] = useState();
+  const [isLoading, setIsLoading] = useState(true);
+  const [Error, setError] = useState();
 
-  const axios = require('axios').default;
+  useEffect(()=>{
+    const fetchTariffs = async () =>{
+      const response = await fetch('https://localhost:7012/api/Package');
+      if (!response.ok) {
+        throw new Error('Something went wrong!');
+      }
+      const responseData = await response.json();
 
-  axios.get('https://localhost:7012/api/User')
-  .then(function(response){
-    console.log(response.data);
-  })
-  .catch(function (error) {
-    // handle error
-    console.log(error);
-  })
-  .then(function () {
-    // always executed
-  });
+      const loadedTariffs = [];
+      for (const key in responseData) {
+        loadedTariffs.push({
+          id: key,
+          tariff_id: responseData[key].tariff_id,
+          name: responseData[key].name,
+          price: responseData[key].price,
+        });
+      }
 
-  
-  const tariffCtx = useContext(TariffContext);
-  const [packages, setPackages] = useState(tariffCtx.tariffs);
+      setPackages(loadedTariffs);
+      setIsLoading(false);
+    }
+    fetchTariffs().catch((error) => {
+      setIsLoading(false);
+      setError(Error.message);
+    });
+  }, []);
+
+  if (Error) {
+    return (
+      <section>
+        <p>{Error}</p>
+      </section>
+    );
+  }
+
+
 
   return (
     <Fragment>
@@ -109,10 +133,12 @@ const Main = () => {
         </div>
       </section>
       <section className={classes.plans} href="#plans" id="plans">
-      <Tariffs tariffs={packages} />
+        {isLoading && <p>Loading...</p>}
+       {!isLoading && <Tariffs tariffs={packages} />}
       </section>
 
-      <Form />
+      {isLoading && <p>Loading...</p>}
+      {!isLoading && <Form tariffs={packages} typeOfHouses={typeOfHouses} />}
     </Fragment>
   );
 };

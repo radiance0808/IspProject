@@ -3,10 +3,10 @@ import classes from "./Form.module.css";
 import useInput from "../../../hooks/use-input-form";
 import ErrorHandlerModal from "../../Helpers/ErrorHandler/ErrorHandlerModal";
 
-import TariffContext from '../../../store/TariffContext';
 
 
-const Form = () => {
+
+const Form = (props) => {
   const [enteredPlan, setEnteredPlan] = useState(null);
   const [enteredPlanIsValid, setEnteredPlanIsValid] = useState(false);
   const [enteredHouseType, setEnteredHouseType] = useState(null);
@@ -14,7 +14,6 @@ const Form = () => {
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-  const tariffCtx = useContext(TariffContext);
 
   let formIsValid = false;
 
@@ -80,7 +79,6 @@ const Form = () => {
     event.preventDefault();
     if (!formIsValid) {
       setShowErrorModal(true);
-      console.log(tariffCtx.tariffs);
     }
 
     if (formIsValid) {
@@ -233,7 +231,7 @@ const Form = () => {
           </div>
         </div>
 
-        {tariffCtx.tariffs.map((tariff)=>(
+        {props.tariffs && props.tariffs.map((tariff)=>(
           <div className={classes.form__radio}>
           <input
             id={tariff.name}
