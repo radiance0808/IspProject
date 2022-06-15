@@ -17,7 +17,7 @@ const Tariff = (props) => {
     <div className={classes.card}>
       <h1>{props.name}</h1>
       <p className={classes.price}>{props.price} zl/month</p>
-      <b>{props.name} MBit/s</b>
+      <b>{props.speed} MBit/s</b>
 
       <p>
         <button

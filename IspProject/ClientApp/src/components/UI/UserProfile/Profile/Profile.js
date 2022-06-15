@@ -9,16 +9,29 @@ import Payments from "../PaymentHistory/Payments";
 import ServicesContext from "../../../store/ServicesContext";
 import UserContext from "../../../store/UserContext";
 
+function removeFirstWord(str) {
+  if (!str) {
+    return;
+  }
+  const indexOfSpace = str.indexOf(" ");
+
+  if (indexOfSpace === -1) {
+    return "";
+  }
+
+  return str.substring(indexOfSpace + 1);
+}
+
 
 const Profile = () => {
-  const servicesCtx = useContext(ServicesContext);
   const userCtx = useContext(UserContext);
 
   const [payments, setPayments] = useState(userCtx.paymentHistory);
   const [tariffs, setTariffs] = useState();
-  const [services, setServices] = useState(servicesCtx.services);
+  const [services, setServices] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [Error, setError] = useState();
+
 
 
   useEffect(()=>{
@@ -34,8 +47,9 @@ const Profile = () => {
         loadedTariffs.push({
           id: key,
           tariff_id: responseData[key].tariff_id,
-          name: responseData[key].name,
+          name: responseData[key].nameOfPackage,
           price: responseData[key].price,
+          speed: removeFirstWord(responseData[key].nameOfPackage)
         });
       }
 
@@ -44,9 +58,36 @@ const Profile = () => {
     }
     fetchTariffs().catch((error) => {
       setIsLoading(false);
-      setError(Error.message);
+      setError(error.message);
     });
   }, []);
+  useEffect(()=>{
+    const fetchAdditionalServices = async () =>{
+      const response = await fetch('https://localhost:7012/api/AdditionalService');
+      if (!response.ok) {
+        throw new Error('Something went wrong!');
+      }
+      const responseData = await response.json();
+
+      const loadedAdditionalServices = [];
+      for (const key in responseData) {
+        loadedAdditionalServices.push({
+          id: key,
+          idAdditionalService: responseData[key].idAdditionalService,
+          additionalService: responseData[key].additionalService,
+          price: responseData[key].additionalPrice,
+        });
+      }
+
+      setServices(loadedAdditionalServices);
+      setIsLoading(false);
+    }
+    fetchAdditionalServices().catch((error) => {
+      setIsLoading(false);
+      setError(error.message);
+    });
+  }, []);
+  
 
   if (Error) {
     return (
@@ -62,7 +103,7 @@ const Profile = () => {
       <Balance />
       {isLoading && <p>Loading...</p>}
       {!isLoading && <Tariffs tariffs={tariffs} />}
-      <Services services={services} />
+      {!isLoading && <Services services={services} />}
       <Controls />
       <Notifications />
       <Equipment />

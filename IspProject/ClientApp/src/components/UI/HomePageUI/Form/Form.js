@@ -1,10 +1,7 @@
-import React, {useState, useContext } from 'react';
+import React, { useState, useContext } from "react";
 import classes from "./Form.module.css";
 import useInput from "../../../hooks/use-input-form";
 import ErrorHandlerModal from "../../Helpers/ErrorHandler/ErrorHandlerModal";
-
-
-
 
 const Form = (props) => {
   const [enteredPlan, setEnteredPlan] = useState(null);
@@ -13,7 +10,6 @@ const Form = (props) => {
   const [enteredHouseTypeIsValid, setEnteredHouseTypeIsValid] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-
 
   let formIsValid = false;
 
@@ -175,46 +171,22 @@ const Form = (props) => {
             />
             {phoneHasError && <p>Please provide correct phone number.</p>}
           </div>
-          <div className={classes.form__radio}>
-            <input
-              id="apartment_buildings"
-              type="radio"
-              name="house"
-              value="Apartment building"
-              onChange={houseTypeChangeHandler}
-            />
-            <label htmlFor="apartment_buildings">Apartment building</label>
-          </div>
-          <div className={classes.form__radio}>
-            <input
-              id="low_rise_buildings"
-              type="radio"
-              name="house"
-              value="Low-rise building"
-              onChange={houseTypeChangeHandler}
-            />
-            <label htmlFor="low_rise_buildings">Low-rise building</label>
-          </div>
-          <div className={classes.form__radio}>
-            <input
-              id="private"
-              type="radio"
-              name="house"
-              value="Private location/house"
-              onChange={houseTypeChangeHandler}
-            />
-            <label htmlFor="private">Private location/house</label>
-          </div>
-          <div className={classes.form__radio}>
-            <input
-              id="office"
-              type="radio"
-              name="house"
-              value="office"
-              onChange={houseTypeChangeHandler}
-            />
-            <label htmlFor="office">Office</label>
-          </div>
+          {props.typeOfHouses &&
+          props.typeOfHouses.map((typeOfHouse) => (
+            <div className={classes.form__radio}>
+              <input
+                id={typeOfHouse.typeOfHouse}
+                key={typeOfHouse.idTypeOfHouse}
+                type="radio"
+                name="typeOfHouse"
+                value={typeOfHouse.typeOfHouse}
+                onChange={houseTypeChangeHandler}
+              />
+              <label htmlFor={typeOfHouse.typeOfHouse}>
+                {typeOfHouse.typeOfHouse}
+              </label>
+            </div>
+          ))}
           <div className={classes.form__input__group}>
             <b>Address</b>
             <input
@@ -231,19 +203,23 @@ const Form = (props) => {
           </div>
         </div>
 
-        {props.tariffs && props.tariffs.map((tariff)=>(
-          <div className={classes.form__radio}>
-          <input
-            id={tariff.name}
-            type="radio"
-            name="package"
-            value={tariff.name}
-            onChange={planChangeHandler}
-          />
-          <label htmlFor={tariff.nameOfPackage}>{tariff.nameOfPackage}</label>
-        </div>
-        ))}
-        
+        {props.tariffs &&
+          props.tariffs.map((tariff) => (
+            <div className={classes.form__radio}>
+              <input
+                id={tariff.name}
+                key={tariff.tariff_id}
+                type="radio"
+                name="package"
+                value={tariff.name}
+                onChange={planChangeHandler}
+              />
+              <label htmlFor={tariff.nameOfPackage}>
+                {tariff.nameOfPackage}
+              </label>
+            </div>
+          ))}
+
         <div className={classes.form__submit}>
           <button onClick={formSubmitHandler}>Submit</button>
         </div>

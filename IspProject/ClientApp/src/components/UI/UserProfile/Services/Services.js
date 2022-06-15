@@ -10,12 +10,12 @@ const Services = (props) => {
         <h1>Some additional services</h1>
       </section>
       <ul className={classes.product__cards}>
-      {props.services.map((services) => (
+      {props.services && props.services.map((services) => (
             <Service
-              key={services.service_id}
-              service_id={services.service_id}
+              key={services.idAdditionalService}
+              idAdditionalService={services.idAdditionalService}
               additionalService={services.additionalService}
-              additionalServicePrice={services.additionalServicePrice}
+              additionalServicePrice={services.price}
             />
           ))}
           </ul>

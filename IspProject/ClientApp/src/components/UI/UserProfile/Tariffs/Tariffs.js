@@ -10,13 +10,13 @@ const Tariffs = (props) => {
         <h1>Would you like to change your plan?</h1>
       </section>
       <ul className={classes.product__cards}>
-        {console.log(props.tariffs)}
       {props.tariffs.map((tariffs) => (
             <Tariff
               key={tariffs.tariff_id}
               tariff_id={tariffs.tariff_id}
               name={tariffs.name}
               price={tariffs.price}
+              speed={tariffs.speed}
             />
           ))}
           </ul>

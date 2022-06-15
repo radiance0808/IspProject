@@ -7,24 +7,18 @@ import Form from "../Form/Form";
 import Tariffs from "../Plans/Tariffs";
 import axios from "axios";
 
-const DUMMY_TARIFFS = [
-  {
-    tariff_id: "1",
-    name: "Standard 100",
-    price: 30.0,
-  },
-  {
-    tariff_id: "2",
-    name: "Pro 200",
-    price: 60.0,
-  },
-  {
-    tariff_id: "3",
-    name: "Enterprise 500",
-    price: 100.0,
-  },
-];
+function removeFirstWord(str) {
+  if (!str) {
+    return;
+  }
+  const indexOfSpace = str.indexOf(" ");
 
+  if (indexOfSpace === -1) {
+    return "";
+  }
+
+  return str.substring(indexOfSpace + 1);
+}
 
 const Main = () => {
   const [packages, setPackages] = useState([]);
@@ -32,11 +26,11 @@ const Main = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [Error, setError] = useState();
 
-  useEffect(()=>{
-    const fetchTariffs = async () =>{
-      const response = await fetch('https://localhost:7012/api/Package');
+  useEffect(() => {
+    const fetchTariffs = async () => {
+      const response = await fetch("https://localhost:7012/api/Package");
       if (!response.ok) {
-        throw new Error('Something went wrong!');
+        throw new Error("Something went wrong!");
       }
       const responseData = await response.json();
 
@@ -47,15 +41,41 @@ const Main = () => {
           tariff_id: responseData[key].idPackage,
           nameOfPackage: responseData[key].nameOfPackage,
           price: responseData[key].price,
+          speed: removeFirstWord(responseData[key].nameOfPackage),
         });
       }
 
       setPackages(loadedTariffs);
-      setIsLoading(false);
-    }
+    };
     fetchTariffs().catch((error) => {
       setIsLoading(false);
-      setError(Error.message);
+      setError(error.message);
+    });
+  }, []);
+
+  useEffect(() => {
+    const fetchTypeOfHouses = async () => {
+      const response = await fetch("https://localhost:7012/api/TypeOfHouse");
+      if (!response.ok) {
+        throw new Error("Something went wrong!");
+      }
+      const responseData = await response.json();
+
+      const loadedTypesOfHouse = [];
+      for (const key in responseData) {
+        loadedTypesOfHouse.push({
+          id: key,
+          idTypeOfHouse: responseData[key].idTypeOfHouse,
+          typeOfHouse: responseData[key].typeOfHouse,
+        });
+      }
+
+      setTypeOfHouses(loadedTypesOfHouse);
+      setIsLoading(false);
+    };
+    fetchTypeOfHouses().catch((error) => {
+      setIsLoading(false);
+      setError(error.message);
     });
   }, []);
 
@@ -66,8 +86,6 @@ const Main = () => {
       </section>
     );
   }
-
-
 
   return (
     <Fragment>
@@ -134,7 +152,7 @@ const Main = () => {
       </section>
       <section className={classes.plans} href="#plans" id="plans">
         {isLoading && <p>Loading...</p>}
-       {!isLoading && <Tariffs tariffs={packages} />}
+        {!isLoading && <Tariffs tariffs={packages} />}
       </section>
 
       {isLoading && <p>Loading...</p>}
