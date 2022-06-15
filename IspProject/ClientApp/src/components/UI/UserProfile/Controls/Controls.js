@@ -25,6 +25,14 @@ const Controls = () => {
           Top-up Balance
         </button>
         <button className={classes.button}>Freeze account</button>
+        <button
+          className={classes.button}
+          onClick={() => {
+            history.push("/profile/support");
+          }}
+        >
+          Support
+        </button>
       </div>
     </div>
   );

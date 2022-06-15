@@ -5,22 +5,23 @@
   padding-top: 40px;
 }
 .wrapper {
-  padding: 0 10px;
-  position: relative;
-  display: flex;
-  justify-content: center;
+  text-align: center;
+  font-family: arial;
+  flex: 1 1 150px;
+
 }
 .button {
-  color: #000000;
-  border: 3px solid #000000;
+  color: white;
+  background-color: black;
+  width: 200px;
   margin: 0 10px;
   margin-bottom: 20px;
   display: inline-block;
   height: 60px;
   border: 0 none;
   font-size: 16px;
-  padding-left: 60px;
-  padding-right: 60px;
+  padding-left: 30px;
+  padding-right: 30px;
   text-align: center;
   white-space: nowrap;
   vertical-align: middle;
