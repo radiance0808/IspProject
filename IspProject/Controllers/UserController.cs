@@ -52,7 +52,7 @@ namespace IspProject.Controllers
                 return NotFound();
             }
 
-            return _mapper.Map<UserDTO> user;
+            return user;
         }
 
         // PUT: api/User/5
