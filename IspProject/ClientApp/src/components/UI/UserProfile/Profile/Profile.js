@@ -6,7 +6,6 @@ import Controls from "../Controls/Controls";
 import Notifications from "../Notifications/Notifications";
 import Equipment from "../Equipment/Equipment";
 import Payments from "../PaymentHistory/Payments";
-import ServicesContext from "../../../store/ServicesContext";
 import UserContext from "../../../store/UserContext";
 
 function removeFirstWord(str) {

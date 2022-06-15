@@ -173,10 +173,9 @@ const Form = (props) => {
           </div>
           {props.typeOfHouses &&
           props.typeOfHouses.map((typeOfHouse) => (
-            <div className={classes.form__radio}>
+            <div className={classes.form__radio} key={typeOfHouse.idTypeOfHouse}>
               <input
                 id={typeOfHouse.typeOfHouse}
-                key={typeOfHouse.idTypeOfHouse}
                 type="radio"
                 name="typeOfHouse"
                 value={typeOfHouse.typeOfHouse}
@@ -205,16 +204,15 @@ const Form = (props) => {
 
         {props.tariffs &&
           props.tariffs.map((tariff) => (
-            <div className={classes.form__radio}>
+            <div className={classes.form__radio} key={tariff.tariff_id}>
               <input
                 id={tariff.name}
-                key={tariff.tariff_id}
                 type="radio"
                 name="package"
                 value={tariff.name}
                 onChange={planChangeHandler}
               />
-              <label htmlFor={tariff.nameOfPackage}>
+              <label htmlFor={tariff.nameOfPackage} >
                 {tariff.nameOfPackage}
               </label>
             </div>
