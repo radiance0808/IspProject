@@ -81,13 +81,14 @@ const Main = () => {
 
   if (Error) {
     return (
-      <section>
-        <p>{Error}</p>
+      <section className={classes.error}>
+        <p>Seems that server is down. Try reloading page or try again later.</p>
       </section>
     );
   }
 
   return (
+    
     <Fragment>
       <section className={classes.starting} href="#main" id="main">
         <h1>We connect people around Poland</h1>
@@ -151,11 +152,10 @@ const Main = () => {
         </div>
       </section>
       <section className={classes.plans} href="#plans" id="plans">
-        {isLoading && <p>Loading...</p>}
+
         {!isLoading && <Tariffs tariffs={packages} />}
       </section>
 
-      {isLoading && <p>Loading...</p>}
       {!isLoading && <Form tariffs={packages} typeOfHouses={typeOfHouses} />}
     </Fragment>
   );
