@@ -52,36 +52,30 @@ namespace IspProject.Controllers
                 return NotFound();
             }
 
-            return user;
+            return _mapper.Map<UserDTO> user;
         }
 
         // PUT: api/User/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(int id, User user)
+        public async Task<IActionResult> PutUser(int id, UserCreationDTO userCreationDTO)
         {
+            var user = await _context.users.FindAsync(id);
+
             if (id != user.idUser)
             {
                 return BadRequest();
             }
 
-            _context.Entry(user).State = EntityState.Modified;
+            if (user == null)
+            {
+                return NotFound();
+            }
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            user = _mapper.Map(userCreationDTO, user);
+
+            
+            await _context.SaveChangesAsync();
 
             return NoContent();
         }
