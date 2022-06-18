@@ -11,6 +11,7 @@ import AuthContext from "./components/store/AuthContext";
 import Layout from "./components/UI/Helpers/Layout/Layout";
 import Profile from "./components/UI/UserProfile/Profile/Profile";
 import Statistics from "./components/UI/UserProfile/Statistics/Statistics";
+import Support from "./components/UI/UserProfile/Support/Support";
 import Topup from "./components/UI/UserProfile/TopUp/Topup";
 
 function App() {
@@ -42,6 +43,10 @@ function App() {
           <Route path="/profile/topup" exact>
             {!authCtx.isLogged && <Redirect to="/login" />}
             {authCtx.isLogged && <Topup />}
+          </Route>
+          <Route path="/profile/support" exact>
+            {!authCtx.isLogged && <Redirect to="/login" />}
+            {authCtx.isLogged && <Support />}
           </Route>
           <Route path="*">
             <Redirect to="/"/>

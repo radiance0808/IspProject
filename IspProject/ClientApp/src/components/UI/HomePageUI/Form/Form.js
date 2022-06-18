@@ -10,6 +10,9 @@ const Form = (props) => {
   const [enteredHouseTypeIsValid, setEnteredHouseTypeIsValid] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [housesLoaded, setHousesLoaded] = useState(true);
+  const [packagesLoaded, setPackagesLoaded] = useState(true);
+  const [isPostDataError, setIsPostDataError] = useState(false);
 
   let formIsValid = false;
 
@@ -61,6 +64,12 @@ const Form = (props) => {
   ) {
     formIsValid = true;
   }
+  if(!props.tariffs){
+    setPackagesLoaded(false);
+  }
+  if(!props.typeOfHouses){
+    setHousesLoaded(false);
+  }
 
   const errorHandler = () => {
     setShowErrorModal(false);
@@ -74,16 +83,21 @@ const Form = (props) => {
   const formSubmitHandler = (event) => {
     event.preventDefault();
     if (!formIsValid) {
-      setShowErrorModal(true);
+    setShowErrorModal(true);
     }
 
     if (formIsValid) {
-      console.log(enteredName);
-      console.log(enteredEmail);
-      console.log(enteredAddress);
-      console.log(enteredHouseType);
-      console.log(enteredPhone);
-      console.log(enteredPlan);
+      const axios = require('axios');
+      axios.post('https://localhost:7012/api/adress', {
+        address: {enteredAddress},
+        idTypeOfHouse: {enteredHouseType}
+      })
+      .then(function (response) {
+        
+      })
+      .catch(function (error) {
+        setIsPostDataError(true);
+      });
       resetAllInputs();
       setShowSuccessModal(true);
     }
@@ -119,6 +133,12 @@ const Form = (props) => {
           data="The data has been sent successfully!"
           onConfirm={successHandler}
         />
+      )}
+      {isPostDataError && (
+        <ErrorHandlerModal
+        data="The data has been sent successfully!"
+        onConfirm={successHandler}
+      />
       )}
       <div className={classes.form__text}>
         <h1>Would you like to connect?</h1>
@@ -178,7 +198,7 @@ const Form = (props) => {
                 id={typeOfHouse.typeOfHouse}
                 type="radio"
                 name="typeOfHouse"
-                value={typeOfHouse.typeOfHouse}
+                value={typeOfHouse.idTypeOfHouse}
                 onChange={houseTypeChangeHandler}
               />
               <label htmlFor={typeOfHouse.typeOfHouse}>
@@ -186,6 +206,7 @@ const Form = (props) => {
               </label>
             </div>
           ))}
+          {!housesLoaded && <p>Seems there is a problem from our side. Please try again</p>}
           <div className={classes.form__input__group}>
             <b>Address</b>
             <input
@@ -206,10 +227,10 @@ const Form = (props) => {
           props.tariffs.map((tariff) => (
             <div className={classes.form__radio} key={tariff.tariff_id}>
               <input
-                id={tariff.name}
+                id={tariff.nameOfPackage}
                 type="radio"
                 name="package"
-                value={tariff.name}
+                value={tariff.nameOfPackage}
                 onChange={planChangeHandler}
               />
               <label htmlFor={tariff.nameOfPackage} >
@@ -217,6 +238,7 @@ const Form = (props) => {
               </label>
             </div>
           ))}
+          {!packagesLoaded && <p>Seems there is a problem from our side. Please try again</p>}
 
         <div className={classes.form__submit}>
           <button onClick={formSubmitHandler}>Submit</button>
