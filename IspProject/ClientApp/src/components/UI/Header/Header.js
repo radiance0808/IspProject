@@ -42,14 +42,17 @@ const Header = () => {
             <nav>
               <ul>
                 {!isLoggedIn && <li><a onClick={() => {
+                  history.push('/');
                   const section = document.querySelector( '#about' );
                   handleClick(section);
                 }}>About</a></li>}
                 {!isLoggedIn && <li><a onClick={() => {
+                  history.push('/');
                   const section = document.querySelector( '#plans' );
                   handleClick(section);
                 }}>Tariffs</a></li>}
                 {!isLoggedIn && <li><a onClick={() => {
+                  history.push('/');
                   const section = document.querySelector( '#request' );
                   handleClick(section);
                 }}>Request</a></li>}
