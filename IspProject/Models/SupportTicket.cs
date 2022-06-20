@@ -7,7 +7,9 @@
 
         public string topic { get; set;}
         
-        public string message { get; set;}
+        public string question { get; set;}
+        
+        public string answer { get; set;}
 
         public DateTime dateOfCreation { get; set; }
 
@@ -17,13 +19,12 @@
 
         public DateTime updatedAt { get; set; }
 
-        public int? idAdministrator { get; set; }
+        public int? idUser { get; set; }
 
-        public int? idAccount { get; set; }
-
-        public Administrator Administrator { get; set; }
+       
         
-        public Account account { get; set; }
+        
+        public User user { get; set; }
 
         
 

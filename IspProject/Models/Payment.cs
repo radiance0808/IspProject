@@ -4,7 +4,7 @@
     {
         public int idPayment { get; set; }
 
-        public double ammount { get; set; }
+        public double amount { get; set; }
 
         public DateTime date { get; set; }
         

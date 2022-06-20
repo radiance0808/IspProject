@@ -22,24 +22,24 @@ namespace IspProject.Controllers
 
         // GET: api/Adress
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Adress>>> Getadresses()
+        public async Task<ActionResult<IEnumerable<Address>>> Getadresses()
         {
-          if (_context.adresses == null)
+          if (_context.addresses == null)
           {
               return NotFound();
           }
-            return await _context.adresses.ToListAsync();
+            return await _context.addresses.ToListAsync();
         }
 
         // GET: api/Adress/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Adress>> GetAdress(int id)
+        public async Task<ActionResult<Address>> GetAdress(int id)
         {
-          if (_context.adresses == null)
+          if (_context.addresses == null)
           {
               return NotFound();
           }
-            var adress = await _context.adresses.FindAsync(id);
+            var adress = await _context.addresses.FindAsync(id);
 
             if (adress == null)
             {
@@ -52,9 +52,9 @@ namespace IspProject.Controllers
         // PUT: api/Adress/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAdress(int id, Adress adress)
+        public async Task<IActionResult> PutAdress(int id, Address adress)
         {
-            if (id != adress.idAdress)
+            if (id != adress.idAddress)
             {
                 return BadRequest();
             }
@@ -83,33 +83,33 @@ namespace IspProject.Controllers
         // POST: api/Adress
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Adress>> PostAdress(Adress adress)
+        public async Task<ActionResult<Address>> PostAdress(Address address)
         {
-          if (_context.adresses == null)
+          if (_context.addresses == null)
           {
               return Problem("Entity set 'AccountDbContext.adresses'  is null.");
           }
-            _context.adresses.Add(adress);
+            _context.addresses.Add(address);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetAdress", new { id = adress.idAdress }, adress);
+            return CreatedAtAction("GetAdress", new { id = address.idAddress }, address);
         }
 
         // DELETE: api/Adress/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAdress(int id)
         {
-            if (_context.adresses == null)
+            if (_context.addresses == null)
             {
                 return NotFound();
             }
-            var adress = await _context.adresses.FindAsync(id);
+            var adress = await _context.addresses.FindAsync(id);
             if (adress == null)
             {
                 return NotFound();
             }
 
-            _context.adresses.Remove(adress);
+            _context.addresses.Remove(adress);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -117,7 +117,7 @@ namespace IspProject.Controllers
 
         private bool AdressExists(int id)
         {
-            return (_context.adresses?.Any(e => e.idAdress == id)).GetValueOrDefault();
+            return (_context.addresses?.Any(e => e.idAddress == id)).GetValueOrDefault();
         }
     }
 }

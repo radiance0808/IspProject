@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
-
+using IspProject.Settings;
 
 namespace IspProject
 {
@@ -32,39 +32,35 @@ namespace IspProject
             .AllowAnyHeader()
             .AllowCredentials());
             });
-            
 
+            services.AddScoped<IJWTAuthService, JWTAuthService>();
 
-            /*services.AddAuthentication(x =>
-            {
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(o =>
-            {
-                var Key = Encoding.UTF8.GetBytes(Configuration["JWT:Key"]);
-                o.SaveToken = true;
-                o.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = Configuration["JWT:Issuer"],
-                    ValidAudience = Configuration["JWT:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Key)
-                };
-            });
-
-            services.AddSingleton<IJWTManagerRepository, JWTManagerRepository>();*/
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                   .AddJwtBearer(options =>
+                   {
+                       options.TokenValidationParameters = new TokenValidationParameters
+                       {
+                           ValidateIssuer = true,
+                           ValidateAudience = true,
+                           ValidateLifetime = true,
+                           ValidIssuer = "diet-app-server",
+                           ValidAudience = "diet-app-client",
+                           ClockSkew = TimeSpan.Zero,
+                           IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["SecretKey"]))
+                       };
+                   });
 
             //services.AddScoped<IDbService, DbService>();
             services.AddDbContext<AccountDbContext>(opt =>
             {
-                opt.UseSqlServer("Server=tcp:ispproject.database.windows.net,1433;Initial Catalog=IspProject;Persist Security Info=False;User ID=radyslavburylko;Password=ispproject_2022;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+                opt.UseSqlServer("Server=tcp:ispprojectdb.database.windows.net,1433;Initial Catalog=IspProject;Persist Security Info=False;User ID=radyslavburylko;Password=ispproject_2022;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
             });
 
             services.AddAutoMapper(typeof(Startup));
             services.AddControllers();
+
+            /*var _jwtsettings = Configuration.GetSection("JWTSettings");
+            services.Configure<JWTSettings>(_jwtsettings);*/
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -6,8 +6,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using IspProject.Models;
-using IspProject.DTOs;
-using AutoMapper;
 
 namespace IspProject.Controllers
 {
@@ -16,25 +14,21 @@ namespace IspProject.Controllers
     public class UserController : ControllerBase
     {
         private readonly AccountDbContext _context;
-        private readonly IMapper _mapper;
 
-        public UserController(AccountDbContext context, IMapper mapper)
+        public UserController(AccountDbContext context)
         {
             _context = context;
-            _mapper = mapper;
         }
 
         // GET: api/User
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserDTO>>> Getusers()
+        public async Task<ActionResult<IEnumerable<User>>> Getusers()
         {
           if (_context.users == null)
           {
               return NotFound();
           }
-            var users = await _context.users.ToListAsync();
-            return _mapper.Map<List<UserDTO>>(users);
-            
+            return await _context.users.ToListAsync();
         }
 
         // GET: api/User/5
@@ -58,24 +52,30 @@ namespace IspProject.Controllers
         // PUT: api/User/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(int id, UserCreationDTO userCreationDTO)
+        public async Task<IActionResult> PutUser(int id, User user)
         {
-            var user = await _context.users.FindAsync(id);
-
             if (id != user.idUser)
             {
                 return BadRequest();
             }
 
-            if (user == null)
+            _context.Entry(user).State = EntityState.Modified;
+
+            try
             {
-                return NotFound();
+                await _context.SaveChangesAsync();
             }
-
-            user = _mapper.Map(userCreationDTO, user);
-
-            
-            await _context.SaveChangesAsync();
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!UserExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
 
             return NoContent();
         }
@@ -83,13 +83,12 @@ namespace IspProject.Controllers
         // POST: api/User
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<User>> PostUser(UserCreationDTO userCreationDTO)
+        public async Task<ActionResult<User>> PostUser(User user)
         {
           if (_context.users == null)
           {
               return Problem("Entity set 'AccountDbContext.users'  is null.");
           }
-          var user = _mapper.Map<User>(userCreationDTO);
             _context.users.Add(user);
             await _context.SaveChangesAsync();
 

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IspProject.Migrations
 {
     [DbContext(typeof(AccountDbContext))]
-    [Migration("20220607130732_InitialMigration")]
+    [Migration("20220618160143_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -45,7 +45,7 @@ namespace IspProject.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("getdate()");
 
-                    b.Property<int>("idAdress")
+                    b.Property<int>("idAddress")
                         .HasColumnType("int");
 
                     b.Property<int>("idEquipment")
@@ -57,22 +57,12 @@ namespace IspProject.Migrations
                     b.Property<int>("idUser")
                         .HasColumnType("int");
 
-                    b.Property<string>("login")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("password")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
                     b.Property<DateTime>("updatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("idAccount");
 
-                    b.HasIndex("idAdress");
+                    b.HasIndex("idAddress");
 
                     b.HasIndex("idEquipment");
 
@@ -120,42 +110,13 @@ namespace IspProject.Migrations
                     b.ToTable("additionalServices");
                 });
 
-            modelBuilder.Entity("IspProject.Models.Administrator", b =>
+            modelBuilder.Entity("IspProject.Models.Address", b =>
                 {
-                    b.Property<int>("idAdministrator")
+                    b.Property<int>("idAddress")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("idAdministrator"), 1L, 1);
-
-                    b.Property<int>("idUser")
-                        .HasColumnType("int");
-
-                    b.Property<string>("login")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("password")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.HasKey("idAdministrator");
-
-                    b.HasIndex("idUser")
-                        .IsUnique();
-
-                    b.ToTable("administrators");
-                });
-
-            modelBuilder.Entity("IspProject.Models.Adress", b =>
-                {
-                    b.Property<int>("idAdress")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("adress")
+                    b.Property<string>("address")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
@@ -163,9 +124,9 @@ namespace IspProject.Migrations
                     b.Property<int>("idTypeOfHouse")
                         .HasColumnType("int");
 
-                    b.HasKey("idAdress");
+                    b.HasKey("idAddress");
 
-                    b.ToTable("adresses");
+                    b.ToTable("addresses");
                 });
 
             modelBuilder.Entity("IspProject.Models.Equipment", b =>
@@ -220,7 +181,7 @@ namespace IspProject.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("idPayment"), 1L, 1);
 
-                    b.Property<double>("ammount")
+                    b.Property<double>("amount")
                         .HasColumnType("float");
 
                     b.Property<DateTime>("date")
@@ -244,7 +205,7 @@ namespace IspProject.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("idPotentialClient"), 1L, 1);
 
-                    b.Property<int>("idAdress")
+                    b.Property<int>("idAddress")
                         .HasColumnType("int");
 
                     b.Property<string>("name")
@@ -259,7 +220,7 @@ namespace IspProject.Migrations
 
                     b.HasKey("idPotentialClient");
 
-                    b.HasIndex("idAdress");
+                    b.HasIndex("idAddress");
 
                     b.ToTable("potentialClients");
                 });
@@ -315,21 +276,23 @@ namespace IspProject.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("idSupportTicket"), 1L, 1);
 
+                    b.Property<string>("answer")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
                     b.Property<DateTime>("dateOfCreation")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("getdate()");
 
-                    b.Property<int?>("idAccount")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("idAdministrator")
+                    b.Property<int?>("idUser")
                         .HasColumnType("int");
 
                     b.Property<bool>("isFinished")
                         .HasColumnType("bit");
 
-                    b.Property<string>("message")
+                    b.Property<string>("question")
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
@@ -349,9 +312,7 @@ namespace IspProject.Migrations
 
                     b.HasKey("idSupportTicket");
 
-                    b.HasIndex("idAccount");
-
-                    b.HasIndex("idAdministrator");
+                    b.HasIndex("idUser");
 
                     b.ToTable("supportTickets");
                 });
@@ -414,6 +375,19 @@ namespace IspProject.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("idUser"), 1L, 1);
 
+                    b.Property<string>("Refreshtoken")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<DateTime?>("Refreshtokenexp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
                     b.Property<string>("emailAdress")
                         .IsRequired()
                         .HasMaxLength(20)
@@ -429,10 +403,20 @@ namespace IspProject.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
+                    b.Property<string>("login")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
                     b.Property<string>("passportId")
                         .IsRequired()
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
+
+                    b.Property<string>("password")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("phoneNumber")
                         .IsRequired()
@@ -446,9 +430,9 @@ namespace IspProject.Migrations
 
             modelBuilder.Entity("IspProject.Models.Account", b =>
                 {
-                    b.HasOne("IspProject.Models.Adress", "Adress")
+                    b.HasOne("IspProject.Models.Address", "Address")
                         .WithMany("Accounts")
-                        .HasForeignKey("idAdress")
+                        .HasForeignKey("idAddress")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -470,7 +454,7 @@ namespace IspProject.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Adress");
+                    b.Navigation("Address");
 
                     b.Navigation("Equipment");
 
@@ -498,22 +482,11 @@ namespace IspProject.Migrations
                     b.Navigation("account");
                 });
 
-            modelBuilder.Entity("IspProject.Models.Administrator", b =>
-                {
-                    b.HasOne("IspProject.Models.User", "User")
-                        .WithOne("administrator")
-                        .HasForeignKey("IspProject.Models.Administrator", "idUser")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("IspProject.Models.Adress", b =>
+            modelBuilder.Entity("IspProject.Models.Address", b =>
                 {
                     b.HasOne("IspProject.Models.TypeOfHouse", "typeOfHouse")
-                        .WithMany("Adresses")
-                        .HasForeignKey("idAdress")
+                        .WithMany("Addresses")
+                        .HasForeignKey("idAddress")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -533,13 +506,13 @@ namespace IspProject.Migrations
 
             modelBuilder.Entity("IspProject.Models.PotentialClient", b =>
                 {
-                    b.HasOne("IspProject.Models.Adress", "adress")
+                    b.HasOne("IspProject.Models.Address", "address")
                         .WithMany("PotentialClients")
-                        .HasForeignKey("idAdress")
+                        .HasForeignKey("idAddress")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("adress");
+                    b.Navigation("address");
                 });
 
             modelBuilder.Entity("IspProject.Models.Script_AdditionalService", b =>
@@ -563,17 +536,11 @@ namespace IspProject.Migrations
 
             modelBuilder.Entity("IspProject.Models.SupportTicket", b =>
                 {
-                    b.HasOne("IspProject.Models.Account", "account")
+                    b.HasOne("IspProject.Models.User", "user")
                         .WithMany("SupportTickets")
-                        .HasForeignKey("idAccount");
+                        .HasForeignKey("idUser");
 
-                    b.HasOne("IspProject.Models.Administrator", "Administrator")
-                        .WithMany("SupportTickets")
-                        .HasForeignKey("idAdministrator");
-
-                    b.Navigation("Administrator");
-
-                    b.Navigation("account");
+                    b.Navigation("user");
                 });
 
             modelBuilder.Entity("IspProject.Models.Traffic", b =>
@@ -593,8 +560,6 @@ namespace IspProject.Migrations
 
                     b.Navigation("Payments");
 
-                    b.Navigation("SupportTickets");
-
                     b.Navigation("Traffics");
                 });
 
@@ -605,12 +570,7 @@ namespace IspProject.Migrations
                     b.Navigation("Script_AdditionalServices");
                 });
 
-            modelBuilder.Entity("IspProject.Models.Administrator", b =>
-                {
-                    b.Navigation("SupportTickets");
-                });
-
-            modelBuilder.Entity("IspProject.Models.Adress", b =>
+            modelBuilder.Entity("IspProject.Models.Address", b =>
                 {
                     b.Navigation("Accounts");
 
@@ -634,15 +594,14 @@ namespace IspProject.Migrations
 
             modelBuilder.Entity("IspProject.Models.TypeOfHouse", b =>
                 {
-                    b.Navigation("Adresses");
+                    b.Navigation("Addresses");
                 });
 
             modelBuilder.Entity("IspProject.Models.User", b =>
                 {
-                    b.Navigation("account")
-                        .IsRequired();
+                    b.Navigation("SupportTickets");
 
-                    b.Navigation("administrator")
+                    b.Navigation("account")
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

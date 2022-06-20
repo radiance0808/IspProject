@@ -9,8 +9,8 @@
 
         public string phoneNumber { get; set; }
 
-        public int idAdress { get; set; }
+        public int idAddress { get; set; }
 
-        public Adress adress { get; set; }
+        public Address address { get; set; }
     }
 }

@@ -7,7 +7,7 @@
         public string typeOfHouse { get; set; }
 
         
-        public virtual ICollection<Adress> Adresses { get; set; }
+        public virtual ICollection<Address> Addresses { get; set; }
 
     }
 }

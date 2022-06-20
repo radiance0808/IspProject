@@ -1,11 +1,11 @@
 ﻿namespace IspProject.Models
 {
-    public class Adress
+    public class Address
     {
 
-        public int idAdress { get; set; }
+        public int idAddress { get; set; }
 
-        public string adress { get; set; }
+        public string address { get; set; }
 
         public int idTypeOfHouse { get; set; }
 
