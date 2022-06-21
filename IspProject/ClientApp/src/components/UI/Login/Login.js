@@ -23,8 +23,7 @@ const Login = () => {
     event.preventDefault();
     const enteredLogin = loginInputRef.current.value;
     const enteredPassword = passwordInputRef.current.value;
-    console.log(enteredLogin);
-    console.log(enteredPassword);
+
 
     setIsLoading(true);
 
@@ -61,16 +60,15 @@ const Login = () => {
         const expirationTime = new Date(
           new Date().getTime() + +data.expiresIn * 1000
         );
-        console.log(+data.expiresIn);
-        authCtx.login(data.idToken, expirationTime.toISOString());
-        history.replace("/");
+        console.log(data.role);
+        authCtx.login(data.token, expirationTime.toISOString());
+        history.replace("/profile");
       })
       .catch((err) => {
         alert(err.message);
       });
-
-
   };
+
 
   return (
     <React.Fragment>
