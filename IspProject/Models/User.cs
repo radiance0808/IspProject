@@ -21,8 +21,8 @@
 
         public string Role { get; set; }
 
-        public string Refreshtoken { get; set; }
-        public DateTime? Refreshtokenexp { get; set; }
+        public string RefreshToken { get; set; }
+        public DateTime? RefreshTokenExpiry { get; set; }
 
         public Account account { get; set; }
 

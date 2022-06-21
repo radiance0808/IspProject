@@ -156,8 +156,8 @@ namespace IspProject.Models
                 opt.Property(e => e.emailAdress).HasMaxLength(20);
                 opt.Property(e => e.passportId).HasMaxLength(10);
                 opt.Property(e => e.Role).HasMaxLength(10);
-                opt.Property(e => e.Refreshtoken).HasMaxLength(300);
-                opt.Property(e => e.Refreshtokenexp);
+                opt.Property(e => e.RefreshToken).HasMaxLength(300);
+                opt.Property(e => e.RefreshTokenExpiry);
 
                 opt.HasOne(a => a.account).WithOne(b => b.user).HasForeignKey<Account>(e => e.idUser);
                 
