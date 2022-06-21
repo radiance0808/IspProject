@@ -1,4 +1,4 @@
-import React, { useRef, useContext, useState } from 'react';
+import React, { useRef, useContext, useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import classes from "./Login.module.css";
 import AuthContext from "../../store/AuthContext";
@@ -23,51 +23,53 @@ const Login = () => {
     event.preventDefault();
     const enteredLogin = loginInputRef.current.value;
     const enteredPassword = passwordInputRef.current.value;
+    const [role, setRole] = useState();
 
     console.log(enteredLogin);
     console.log(enteredPassword);
 
     setIsLoading(true);
 
-    let url =
-      "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBoLdVRZ5gvoLjhuhyTfvesjujjiNmQx7w";
+    let url = "https://localhost:7012/api/auth";
 
-    fetch(url, {
-      method: "POST",
-      body: JSON.stringify({
-        email: enteredLogin, //later should be done with login, that's why variable name is different
-        password: enteredPassword,
-        returnSecureToken: true,
-        //secureToken
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => {
-        setIsLoading(false);
-        if (res.ok) {
-          console.log(res);
-          console.log("success!");
-          return res.json();
-        } else {
-          return res.json().then((data) => {
-            setIsError(true);
-        setIsLoading(false);
-          });
-        }
-      })
-      .then((data) => {
-        authCtx.login(data.idToken);
-        history.replace("/");
-      })
-      .catch((err) => {
-        let errorMessage = "Authentication failed! Please try again.";
-        console.log(errorMessage);
-        setIsError(true);
-        setIsLoading(false);
-      });
 
+    useEffect(() => {
+      fetch(url, {
+        method: "POST",
+        body: JSON.stringify({
+          login: enteredLogin,
+          password: enteredPassword,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((res) => {
+          setIsLoading(false);
+          if (res.ok) {
+            return res.json();
+          } else {
+            return res.json().then((data) => {
+              let errorMessage = "Authentication failed!";
+              // if (data && data.error && data.error.message) {
+              //   errorMessage = data.error.message;
+              // }
+  
+              throw new Error(errorMessage);
+            });
+          }
+        })
+        .then((data) => {
+          const expirationTime = new Date(
+            new Date().getTime() + +data.expiresIn * 1000
+          );
+          authCtx.login(data.idToken, expirationTime.toISOString());
+          history.replace("/");
+        })
+        .catch((err) => {
+          alert(err.message);
+        });
+    },[]);
     
   };
 
