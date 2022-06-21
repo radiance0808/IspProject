@@ -1,6 +1,8 @@
 ﻿using IspProject.DTOs;
 using IspProject.Settings;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace IspProject.Controllers
 {
@@ -33,6 +35,23 @@ namespace IspProject.Controllers
         {
             var response = await _authService.RefreshToken(request);
             return Ok(response);
+        }
+
+        [HttpPut("logout")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> DeleteRefreshToken(UserIdRequest request)
+        {
+            var user = HttpContext.User;
+            var nameIdentifier = int.Parse(user.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value);
+            if (nameIdentifier != request.idUser)
+            {
+                return Forbid();
+            }
+            await _authService.DeleteRefreshToken(request.idUser);
+            return Ok();
         }
     }
 }

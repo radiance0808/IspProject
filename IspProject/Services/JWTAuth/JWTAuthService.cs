@@ -21,6 +21,15 @@ namespace IspProject.Settings
             _configuration = configuration;
         }
 
+        public async Task DeleteRefreshToken(int idUser)
+        {
+            var user = await _context.users.FirstOrDefaultAsync(e => e.idUser == idUser);
+            if (user == null) throw new Exception("No such account");
+            user.RefreshToken = null;
+            user.RefreshTokenExpiry = null;
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<JWTLoginResponse> Login(JWTLoginRequest request)
         {
             var user = await _context.users.FirstOrDefaultAsync(e => e.login.ToLower() == request.login);
@@ -63,5 +72,7 @@ namespace IspProject.Settings
                 expiresIn = EXPIRYTIME
     };
         }
+
+        
     }
 }

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using IspProject.Settings;
+using IspProject.Services.PotentialClient;
 
 namespace IspProject
 {
@@ -34,6 +35,7 @@ namespace IspProject
             });
 
             services.AddScoped<IJWTAuthService, JWTAuthService>();
+            services.AddScoped<IPotentialClientService, PotentialClientService>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                    .AddJwtBearer(options =>

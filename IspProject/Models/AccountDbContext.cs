@@ -126,7 +126,10 @@ namespace IspProject.Models
                 opt.Property(e => e.idPotentialClient).ValueGeneratedOnAdd();
                 opt.Property(e => e.name).HasMaxLength(20);
                 opt.Property(e => e.phoneNumber).HasMaxLength(20);
-                opt.HasOne(e => e.address).WithMany(e => e.PotentialClients).HasForeignKey(e => e.idAddress);
+                opt.Property(e => e.email).HasMaxLength(50);
+                opt.Property(e => e.address).HasMaxLength(100);
+                opt.HasOne(e => e.package).WithMany(e => e.PotentialClients).HasForeignKey(e => e.idPackage);
+                opt.HasOne(e => e.typeOfHouse).WithMany(e => e.PotentialClients).HasForeignKey(e => e.idTypeOfHouse);
 
             });
 

@@ -8,6 +8,7 @@
 
         
         public virtual ICollection<Address> Addresses { get; set; }
+        public virtual ICollection<PotentialClient> PotentialClients { get; set; }
 
     }
 }

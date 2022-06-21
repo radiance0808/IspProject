@@ -10,5 +10,6 @@
         public double price { get; set; }
 
         public virtual ICollection<Account> Accounts { get; set; }
+        public virtual ICollection<PotentialClient> PotentialClients { get; set; }
     }
 }

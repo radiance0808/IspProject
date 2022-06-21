@@ -6,6 +6,6 @@ namespace IspProject.Settings
     {
         Task<JWTLoginResponse> Login(JWTLoginRequest request);
         Task<JWTRefreshTokenResponse> RefreshToken(JWTRefreshTokenRequest request);
-        
+        Task DeleteRefreshToken(int idUser);
     }
 }

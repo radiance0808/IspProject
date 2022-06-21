@@ -1,20 +1,21 @@
-﻿namespace IspProject.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace IspProject.DTOs
 {
-    public class PotentialClient
+    public class CreatePotentialClientRequest
     {
 
-        public int idPotentialClient { get; set; }
-
+        [Required]
         public string name { get; set; }
-
+        [Required]
         public string phoneNumber { get; set; }
+        [Required]
         public string address { get; set; }
+        [Required]
         public string email { get; set; }
-
+        [Required]
         public int idPackage { get; set; }
+        [Required]
         public int idTypeOfHouse { get; set; }
-
-        public Package package { get; set; }
-        public TypeOfHouse typeOfHouse { get; set; }
     }
 }

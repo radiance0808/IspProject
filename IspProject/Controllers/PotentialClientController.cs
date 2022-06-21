@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using IspProject.Models;
+using IspProject.Services.PotentialClient;
+using IspProject.DTOs;
 
 namespace IspProject.Controllers
 {
@@ -14,10 +16,12 @@ namespace IspProject.Controllers
     public class PotentialClientController : ControllerBase
     {
         private readonly AccountDbContext _context;
+        private readonly IPotentialClientService _potentialClientService;
 
-        public PotentialClientController(AccountDbContext context)
+        public PotentialClientController(AccountDbContext context, IPotentialClientService potentialClientService)
         {
             _context = context;
+            _potentialClientService = potentialClientService;
         }
 
         // GET: api/PotentialClient
@@ -83,16 +87,14 @@ namespace IspProject.Controllers
         // POST: api/PotentialClient
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<PotentialClient>> PostPotentialClient(PotentialClient potentialClient)
+        
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<ActionResult<PotentialClient>> CreatePotentialClient(CreatePotentialClientRequest request)
         {
-          if (_context.potentialClients == null)
-          {
-              return Problem("Entity set 'AccountDbContext.potentialClients'  is null.");
-          }
-            _context.potentialClients.Add(potentialClient);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetPotentialClient", new { id = potentialClient.idPotentialClient }, potentialClient);
+            var response = await _potentialClientService.CreatePotentialClient(request);
+            return CreatedAtAction(nameof(CreatePotentialClient), response);
         }
 
         // DELETE: api/PotentialClient/5
