@@ -4,8 +4,9 @@ let logoutTimer;
 
 const AuthContext = React.createContext({
   token: '',
-  isLoggedIn: false,
-  login: (token) => {},
+  role: '',
+  isLogged: false,
+  login: (token, role) => {},
   logout: () => {},
 });
 
@@ -32,6 +33,7 @@ const retrieveStoredToken = () => {
 
   return {
     token: storedToken,
+    role: role,
     duration: remainingTime,
   };
 };
@@ -44,7 +46,9 @@ export const AuthContextProvider = (props) => {
     initialToken = tokenData.token;
   }
 
+
   const [token, setToken] = useState(initialToken);
+
 
   const userIsLoggedIn = !!token;
 
@@ -58,12 +62,15 @@ export const AuthContextProvider = (props) => {
     }
   }, []);
 
-  const loginHandler = (token, expirationTime) => {
+  const loginHandler = (token, expirationTime, role) => {
     setToken(token);
     localStorage.setItem('token', token);
     localStorage.setItem('expirationTime', expirationTime);
+    localStorage.setItem('role', role);
+
 
     const remainingTime = calculateRemainingTime(expirationTime);
+
 
     logoutTimer = setTimeout(logoutHandler, remainingTime);
   };
@@ -77,9 +84,10 @@ export const AuthContextProvider = (props) => {
 
   const contextValue = {
     token: token,
-    isLoggedIn: userIsLoggedIn,
+    isLogged: userIsLoggedIn,
     login: loginHandler,
     logout: logoutHandler,
+    role: role,
   };
 
   return (
