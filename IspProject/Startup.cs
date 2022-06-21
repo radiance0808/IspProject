@@ -45,8 +45,8 @@ namespace IspProject
                            ValidateIssuer = true,
                            ValidateAudience = true,
                            ValidateLifetime = true,
-                           ValidIssuer = "diet-app-server",
-                           ValidAudience = "diet-app-client",
+                           ValidIssuer = "ispproject",
+                           ValidAudience = "ispproject",
                            ClockSkew = TimeSpan.Zero,
                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["SecretKey"]))
                        };
