@@ -11,6 +11,7 @@ namespace IspProject.Settings
 {
     public class JWTAuthService : IJWTAuthService
     {
+        private const string EXPIRYTIME = "3600";
         private readonly AccountDbContext _context;
         private readonly IConfiguration _configuration;
 
@@ -37,7 +38,8 @@ namespace IspProject.Settings
             {
                 Token = new JwtSecurityTokenHandler().WriteToken(Token),
                 RefreshToken = refreshToken,
-                Role = user.Role
+                Role = user.Role,
+                expiresIn = EXPIRYTIME
             };
         }
 
@@ -57,8 +59,9 @@ namespace IspProject.Settings
             {
                 Token = new JwtSecurityTokenHandler().WriteToken(Token),
                 RefreshToken = user.RefreshToken,
-                Role = user.Role
-            };
+                Role = user.Role,
+                expiresIn = EXPIRYTIME
+    };
         }
     }
 }
