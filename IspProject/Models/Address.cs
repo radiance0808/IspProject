@@ -5,7 +5,10 @@
 
         public int idAddress { get; set; }
 
-        public string address { get; set; }
+        public string city { get; set; }
+        public string street { get; set; }
+        public string houseNumber { get; set; }
+        public string apartmentNumber { get; set; }
 
         public int idTypeOfHouse { get; set; }
 

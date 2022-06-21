@@ -103,7 +103,10 @@ namespace IspProject.Models
             {
                 opt.HasKey(e => e.idAddress);
                 opt.Property(e => e.idAddress).ValueGeneratedOnAdd();
-                opt.Property(e => e.address).HasMaxLength(50);
+                opt.Property(e => e.city).HasMaxLength(50);
+                opt.Property(e => e.street).HasMaxLength(50);
+                opt.Property(e => e.houseNumber).HasMaxLength(6);
+                opt.Property(e => e.apartmentNumber).HasMaxLength(6);
                 opt.HasOne(e => e.typeOfHouse).WithMany(e => e.Addresses).HasForeignKey(e => e.idAddress);
 
             });
