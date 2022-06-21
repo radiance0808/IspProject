@@ -97,6 +97,18 @@ const Form = (props) => {
       })
       .catch(function (error) {
         setIsPostDataError(true);
+        return;
+      });
+      axios.post('https://localhost:7012/api/adress', {
+        address: {enteredAddress},
+        idTypeOfHouse: {enteredHouseType}
+      })
+      .then(function (response) {
+        
+      })
+      .catch(function (error) {
+        setIsPostDataError(true);
+        return;
       });
       resetAllInputs();
       setShowSuccessModal(true);
