@@ -6,8 +6,10 @@ const AuthContext = React.createContext({
   token: '',
   role: '',
   isLogged: false,
-  login: (token, role) => {},
-  logout: () => {},
+  userIsClient: false,
+  UserIsAdmin: false,
+  login: (token, role) => { },
+  logout: () => { },
 });
 
 const calculateRemainingTime = (expirationTime) => {
@@ -42,17 +44,30 @@ const retrieveStoredToken = () => {
 
 export const AuthContextProvider = (props) => {
   const tokenData = retrieveStoredToken();
-  
+
+  let userIsAdmin;
+  let userIsClient;
   let initialToken;
   let initialRole;
+
   if (tokenData) {
     initialToken = tokenData.token;
     initialRole = tokenData.role;
+    if (initialRole === "Admin") {
+      console.log(initialRole);
+      userIsAdmin = true;
+    }
+    if (initialRole === "Client") {
+      console.log(initialRole);
+      userIsClient = true;
+    }
   }
 
 
   const [token, setToken] = useState(initialToken);
   const [role, setRole] = useState(initialRole);
+  const [isAdmin, setIsAdmin] = useState(userIsAdmin);
+  const [isClient, setIsClient] = useState(userIsClient);
 
 
   const userIsLoggedIn = !!token;
@@ -60,6 +75,8 @@ export const AuthContextProvider = (props) => {
   const logoutHandler = useCallback(() => {
     setToken(null);
     setRole(null);
+    setIsAdmin(false);
+    setIsClient(false);
     localStorage.removeItem('token');
     localStorage.removeItem('expirationTime');
     localStorage.removeItem('role');
@@ -71,9 +88,17 @@ export const AuthContextProvider = (props) => {
 
   const loginHandler = (token, expirationTime, role) => {
     setToken(token);
+    setRole(role);
     localStorage.setItem('token', token);
     localStorage.setItem('expirationTime', expirationTime);
     localStorage.setItem('role', role);
+
+    if (role === "Admin") {
+      setIsAdmin(true);
+    }
+    if (role === "Client") {
+      setIsClient(true);
+    }
 
 
     const remainingTime = calculateRemainingTime(expirationTime);
@@ -84,7 +109,6 @@ export const AuthContextProvider = (props) => {
 
   useEffect(() => {
     if (tokenData) {
-      console.log(tokenData.duration);
       logoutTimer = setTimeout(logoutHandler, tokenData.duration);
     }
   }, [tokenData, logoutHandler]);
@@ -92,6 +116,8 @@ export const AuthContextProvider = (props) => {
   const contextValue = {
     token: token,
     isLogged: userIsLoggedIn,
+    UserIsClient: isClient,
+    UserIsAdmin: isAdmin,
     login: loginHandler,
     logout: logoutHandler,
     role: role,
