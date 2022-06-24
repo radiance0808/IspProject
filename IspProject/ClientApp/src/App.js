@@ -2,13 +2,14 @@ import React, { useContext } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import { Fragment } from "react/cjs/react.development";
 import "./App.css";
-import AdminLoginPage from "./components/pages/AdminLoginPage";
+import AdminPage from "./components/pages/AdminPage";
 import HomePage from "./components/pages/HomePage";
 import LoginPage from "./components/pages/LoginPage";
 import UserPage from "./components/pages/UserPage";
 import AuthContext from "./components/store/AuthContext";
 
 import Layout from "./components/UI/Helpers/Layout/Layout";
+import PageGuard from "./components/UI/HomePageUI/PageGuard/PageGuard";
 import Profile from "./components/UI/UserProfile/Profile/Profile";
 import Statistics from "./components/UI/UserProfile/Statistics/Statistics";
 import Support from "./components/UI/UserProfile/Support/Support";
@@ -20,9 +21,10 @@ function App() {
   return (
     <Fragment>
       <Switch>
-        <Route path="/admin" exact>
-          <AdminLoginPage />
-        </Route>
+        {authCtx.isLogged && authCtx.UserIsAdmin &&
+          <Route path="/admin" exact>
+            <AdminPage />
+          </Route>}
         <Layout>
           <Route path="/" exact>
             <HomePage />
@@ -34,22 +36,26 @@ function App() {
           )}
           <Route path="/profile" exact>
             {!authCtx.isLogged && <Redirect to="/login" />}
-            {authCtx.isLogged && <UserPage />}
+            {authCtx.isLogged && authCtx.UserIsClient && <UserPage />}
+            {authCtx.isLogged && !authCtx.UserIsClient && <PageGuard/>}
           </Route>
           <Route path="/profile/statistics" exact>
             {!authCtx.isLogged && <Redirect to="/login" />}
-            {authCtx.isLogged && <Statistics />}
+            {authCtx.isLogged && authCtx.UserIsClient && <Statistics />}
+            {authCtx.isLogged && !authCtx.UserIsClient && <PageGuard/>}
           </Route>
           <Route path="/profile/topup" exact>
             {!authCtx.isLogged && <Redirect to="/login" />}
-            {authCtx.isLogged && <Topup />}
+            {authCtx.isLogged && authCtx.UserIsClient && <Topup />}
+            {authCtx.isLogged && !authCtx.UserIsClient && <PageGuard/>}
           </Route>
           <Route path="/profile/support" exact>
             {!authCtx.isLogged && <Redirect to="/login" />}
-            {authCtx.isLogged && <Support />}
+            {authCtx.isLogged && authCtx.UserIsClient && <Support />}
+            {authCtx.isLogged && !authCtx.UserIsClient && <PageGuard/>}
           </Route>
           <Route path="*">
-            <Redirect to="/"/>
+            <Redirect to="/" />
           </Route>
         </Layout>
       </Switch>

@@ -60,9 +60,18 @@ const Login = () => {
         const expirationTime = new Date(
           new Date().getTime() + +data.expiresIn * 1000
         );
-        console.log(data.role);
-        authCtx.login(data.token, expirationTime.toISOString());
-        history.replace("/profile");
+        authCtx.login(data.token, expirationTime.toISOString(), data.role);
+        if(data.role === "Admin"){
+          history.replace("/admin");
+        }
+        else if(data.role === "Client"){
+          history.replace("/profile")
+        }
+        else{
+          console.log("Something went wrong.")
+          history.replace("/");
+        }
+
       })
       .catch((err) => {
         alert(err.message);

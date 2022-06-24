@@ -7,6 +7,7 @@ import Notifications from "../Notifications/Notifications";
 import Equipment from "../Equipment/Equipment";
 import Payments from "../PaymentHistory/Payments";
 import UserContext from "../../../store/UserContext";
+import AuthContext from "../../../store/AuthContext";
 
 function removeFirstWord(str) {
   if (!str) {
@@ -24,12 +25,14 @@ function removeFirstWord(str) {
 
 const Profile = () => {
   const userCtx = useContext(UserContext);
+  const authCtx = useContext(AuthContext);
 
   const [payments, setPayments] = useState(userCtx.paymentHistory);
   const [tariffs, setTariffs] = useState();
   const [services, setServices] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [Error, setError] = useState();
+  console.log(authCtx.UserIsAdmin);
 
 
 
