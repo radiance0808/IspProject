@@ -16,7 +16,7 @@ const Login = () => {
   const [isError, setIsError] = useState(false);
 
   const errorHandler = () => {
-    setIsError(null);
+    setIsError(false);
   };
 
   const submitLoginHandler = (event) => {
@@ -47,12 +47,7 @@ const Login = () => {
           return res.json();
         } else {
           return res.json().then((data) => {
-            let errorMessage = "Authentication failed!";
-            // if (data && data.error && data.error.message) {
-            //   errorMessage = data.error.message;
-            // }
-
-            throw new Error(errorMessage);
+            setIsError(true);
           });
         }
       })
@@ -74,7 +69,7 @@ const Login = () => {
 
       })
       .catch((err) => {
-        alert(err.message);
+            setIsError(true);
       });
   };
 

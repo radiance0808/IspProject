@@ -7,6 +7,7 @@ import Form from "../Form/Form";
 import Tariffs from "../Plans/Tariffs";
 import axios from "axios";
 
+
 function removeFirstWord(str) {
   if (!str) {
     return;
@@ -21,7 +22,9 @@ function removeFirstWord(str) {
 }
 
 const Main = () => {
-  const [packages, setPackages] = useState([]);
+
+
+  const [packages, setPackages] = useState();
   const [typeOfHouses, setTypeOfHouses] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [Error, setError] = useState();
@@ -46,6 +49,7 @@ const Main = () => {
       }
 
       setPackages(loadedTariffs);
+      
     };
     fetchTariffs().catch((error) => {
       setIsLoading(false);
@@ -60,7 +64,6 @@ const Main = () => {
         throw new Error("Something went wrong!");
       }
       const responseData = await response.json();
-
       const loadedTypesOfHouse = [];
       for (const key in responseData) {
         loadedTypesOfHouse.push({
@@ -78,6 +81,7 @@ const Main = () => {
       setError(error.message);
     });
   }, []);
+
 
   if (Error) {
     return (
@@ -154,6 +158,7 @@ const Main = () => {
       <section className={classes.plans} href="#plans" id="plans">
 
         {!isLoading && <Tariffs tariffs={packages} />}
+        {isLoading && <p>Please wait...</p>}
       </section>
 
       {!isLoading && <Form tariffs={packages} typeOfHouses={typeOfHouses} />}
