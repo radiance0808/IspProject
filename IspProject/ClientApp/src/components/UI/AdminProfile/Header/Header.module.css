@@ -1,0 +1,41 @@
+.header__content {
+    padding: 0 20px;
+    z-index: 15;
+    position: relative;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    border: 0;
+    box-sizing: content-box;
+    background-color: white;
+}
+
+.header__adminpanel__container {
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    box-sizing: content-box;
+    margin-right: auto;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.header__adminpanel__content {
+    height: 100%;
+    box-sizing: content-box;
+    display: block;
+}
+.header__adminpanel__content a{
+    color: #000000;
+    font-size: 19px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-decoration: none;
+    position: relative;
+    z-index: 1;
+    display: block;
+    transition: all ease-in-out .2s;
+    cursor: pointer;
+}

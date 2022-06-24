@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import { Fragment } from "react/cjs/react.development";
 import "./App.css";
-import AdminLoginPage from "./components/pages/AdminLoginPage";
+import AdminPage from "./components/pages/AdminPage";
 import HomePage from "./components/pages/HomePage";
 import LoginPage from "./components/pages/LoginPage";
 import UserPage from "./components/pages/UserPage";
@@ -23,7 +23,7 @@ function App() {
       <Switch>
         {authCtx.isLogged && authCtx.UserIsAdmin &&
           <Route path="/admin" exact>
-            <AdminLoginPage />
+            <AdminPage />
           </Route>}
         <Layout>
           <Route path="/" exact>
@@ -36,20 +36,23 @@ function App() {
           )}
           <Route path="/profile" exact>
             {!authCtx.isLogged && <Redirect to="/login" />}
-            {authCtx.isLogged && authCtx.userIsClient && <UserPage />}
-            {authCtx.isLogged && !authCtx.userIsClient && <PageGuard/>}
+            {authCtx.isLogged && authCtx.UserIsClient && <UserPage />}
+            {authCtx.isLogged && !authCtx.UserIsClient && <PageGuard/>}
           </Route>
           <Route path="/profile/statistics" exact>
             {!authCtx.isLogged && <Redirect to="/login" />}
-            {authCtx.isLogged && authCtx.userIsClient && <Statistics />}
+            {authCtx.isLogged && authCtx.UserIsClient && <Statistics />}
+            {authCtx.isLogged && !authCtx.UserIsClient && <PageGuard/>}
           </Route>
           <Route path="/profile/topup" exact>
             {!authCtx.isLogged && <Redirect to="/login" />}
-            {authCtx.isLogged && authCtx.userIsClient && <Topup />}
+            {authCtx.isLogged && authCtx.UserIsClient && <Topup />}
+            {authCtx.isLogged && !authCtx.UserIsClient && <PageGuard/>}
           </Route>
           <Route path="/profile/support" exact>
             {!authCtx.isLogged && <Redirect to="/login" />}
-            {authCtx.isLogged && authCtx.userIsClient && <Support />}
+            {authCtx.isLogged && authCtx.UserIsClient && <Support />}
+            {authCtx.isLogged && !authCtx.UserIsClient && <PageGuard/>}
           </Route>
           <Route path="*">
             <Redirect to="/" />

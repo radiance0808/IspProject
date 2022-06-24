@@ -12,13 +12,15 @@ const Header = () => {
   const isLoggedIn = authCtx.isLogged;
 
   const loginHandler = () => {
-    if (authCtx.isLogged && authCtx.userIsClient) {
+    if (authCtx.isLogged && authCtx.UserIsClient) {
       history.push('/profile');
     }
     else if(authCtx.isLogged && authCtx.UserIsAdmin){
       history.push("/admin");
     }
     else {
+      console.log("isLogged?" + isLoggedIn);
+      console.log("isClient?" + authCtx.UserIsClient);
       history.push('/login');
     }
   }
