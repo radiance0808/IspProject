@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IspProject.Migrations
 {
     [DbContext(typeof(AccountDbContext))]
-    [Migration("20220618160143_InitialMigration")]
+    [Migration("20220624112607_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -56,6 +56,9 @@ namespace IspProject.Migrations
 
                     b.Property<int>("idUser")
                         .HasColumnType("int");
+
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime>("updatedAt")
                         .HasColumnType("datetime2");
@@ -116,15 +119,34 @@ namespace IspProject.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("address")
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("idAddress"), 1L, 1);
+
+                    b.Property<string>("apartmentNumber")
+                        .IsRequired()
+                        .HasMaxLength(6)
+                        .HasColumnType("nvarchar(6)");
+
+                    b.Property<string>("city")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<string>("houseNumber")
+                        .IsRequired()
+                        .HasMaxLength(6)
+                        .HasColumnType("nvarchar(6)");
+
                     b.Property<int>("idTypeOfHouse")
                         .HasColumnType("int");
 
+                    b.Property<string>("street")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.HasKey("idAddress");
+
+                    b.HasIndex("idTypeOfHouse");
 
                     b.ToTable("addresses");
                 });
@@ -205,7 +227,20 @@ namespace IspProject.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("idPotentialClient"), 1L, 1);
 
-                    b.Property<int>("idAddress")
+                    b.Property<string>("address")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("email")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("idPackage")
+                        .HasColumnType("int");
+
+                    b.Property<int>("idTypeOfHouse")
                         .HasColumnType("int");
 
                     b.Property<string>("name")
@@ -220,7 +255,9 @@ namespace IspProject.Migrations
 
                     b.HasKey("idPotentialClient");
 
-                    b.HasIndex("idAddress");
+                    b.HasIndex("idPackage");
+
+                    b.HasIndex("idTypeOfHouse");
 
                     b.ToTable("potentialClients");
                 });
@@ -375,12 +412,12 @@ namespace IspProject.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("idUser"), 1L, 1);
 
-                    b.Property<string>("Refreshtoken")
+                    b.Property<string>("RefreshToken")
                         .IsRequired()
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
 
-                    b.Property<DateTime?>("Refreshtokenexp")
+                    b.Property<DateTime?>("RefreshTokenExpiry")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Role")
@@ -486,7 +523,7 @@ namespace IspProject.Migrations
                 {
                     b.HasOne("IspProject.Models.TypeOfHouse", "typeOfHouse")
                         .WithMany("Addresses")
-                        .HasForeignKey("idAddress")
+                        .HasForeignKey("idTypeOfHouse")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -506,13 +543,21 @@ namespace IspProject.Migrations
 
             modelBuilder.Entity("IspProject.Models.PotentialClient", b =>
                 {
-                    b.HasOne("IspProject.Models.Address", "address")
+                    b.HasOne("IspProject.Models.Package", "package")
                         .WithMany("PotentialClients")
-                        .HasForeignKey("idAddress")
+                        .HasForeignKey("idPackage")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("address");
+                    b.HasOne("IspProject.Models.TypeOfHouse", "typeOfHouse")
+                        .WithMany("PotentialClients")
+                        .HasForeignKey("idTypeOfHouse")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("package");
+
+                    b.Navigation("typeOfHouse");
                 });
 
             modelBuilder.Entity("IspProject.Models.Script_AdditionalService", b =>
@@ -573,8 +618,6 @@ namespace IspProject.Migrations
             modelBuilder.Entity("IspProject.Models.Address", b =>
                 {
                     b.Navigation("Accounts");
-
-                    b.Navigation("PotentialClients");
                 });
 
             modelBuilder.Entity("IspProject.Models.Equipment", b =>
@@ -585,6 +628,8 @@ namespace IspProject.Migrations
             modelBuilder.Entity("IspProject.Models.Package", b =>
                 {
                     b.Navigation("Accounts");
+
+                    b.Navigation("PotentialClients");
                 });
 
             modelBuilder.Entity("IspProject.Models.Script", b =>
@@ -595,6 +640,8 @@ namespace IspProject.Migrations
             modelBuilder.Entity("IspProject.Models.TypeOfHouse", b =>
                 {
                     b.Navigation("Addresses");
+
+                    b.Navigation("PotentialClients");
                 });
 
             modelBuilder.Entity("IspProject.Models.User", b =>

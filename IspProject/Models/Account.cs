@@ -12,6 +12,8 @@
 
         public double balance { get; set; }
 
+        public bool isActive { get; set; }
+
         public DateTime createdAt { get; set; }
         public DateTime updatedAt { get; set; }
 

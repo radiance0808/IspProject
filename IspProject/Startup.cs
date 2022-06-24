@@ -6,6 +6,7 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using IspProject.Settings;
 using IspProject.Services.PotentialClient;
+using IspProject.Services.Payment;
 
 namespace IspProject
 {
@@ -36,6 +37,7 @@ namespace IspProject
 
             services.AddScoped<IJWTAuthService, JWTAuthService>();
             services.AddScoped<IPotentialClientService, PotentialClientService>();
+            services.AddScoped<IPaymentService, PaymentService>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                    .AddJwtBearer(options =>

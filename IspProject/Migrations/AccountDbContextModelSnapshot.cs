@@ -55,6 +55,9 @@ namespace IspProject.Migrations
                     b.Property<int>("idUser")
                         .HasColumnType("int");
 
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime>("updatedAt")
                         .HasColumnType("datetime2");
 
@@ -114,6 +117,8 @@ namespace IspProject.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("idAddress"), 1L, 1);
+
                     b.Property<string>("apartmentNumber")
                         .IsRequired()
                         .HasMaxLength(6)
@@ -138,6 +143,8 @@ namespace IspProject.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("idAddress");
+
+                    b.HasIndex("idTypeOfHouse");
 
                     b.ToTable("addresses");
                 });
@@ -514,7 +521,7 @@ namespace IspProject.Migrations
                 {
                     b.HasOne("IspProject.Models.TypeOfHouse", "typeOfHouse")
                         .WithMany("Addresses")
-                        .HasForeignKey("idAddress")
+                        .HasForeignKey("idTypeOfHouse")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

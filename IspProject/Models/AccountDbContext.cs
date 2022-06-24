@@ -107,7 +107,7 @@ namespace IspProject.Models
                 opt.Property(e => e.street).HasMaxLength(50);
                 opt.Property(e => e.houseNumber).HasMaxLength(6);
                 opt.Property(e => e.apartmentNumber).HasMaxLength(6);
-                opt.HasOne(e => e.typeOfHouse).WithMany(e => e.Addresses).HasForeignKey(e => e.idAddress);
+                opt.HasOne(e => e.typeOfHouse).WithMany(e => e.Addresses).HasForeignKey(e => e.idTypeOfHouse);
 
             });
 
@@ -177,6 +177,7 @@ namespace IspProject.Models
                 opt.Property(e => e.idUser);
                 
                 opt.Property(e => e.balance);
+                opt.Property(e => e.isActive);
                 opt.Property(e => e.createdAt).HasDefaultValueSql("getdate()");
                 opt.Property(e => e.updatedAt);
                 opt.Property(e => e.NotificationType).HasConversion<string>().HasMaxLength(50);
