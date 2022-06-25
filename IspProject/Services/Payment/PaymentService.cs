@@ -21,7 +21,7 @@ namespace IspProject.Services.Payment
             {
                 idAccount = account.idAccount,
                 amount = request.amount,
-                date = request.date
+                date = DateTime.Now,
             };
 
             

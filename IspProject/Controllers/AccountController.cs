@@ -6,6 +6,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using IspProject.Models;
+using Microsoft.AspNetCore.Authorization;
+using IspProject.DTOs.Account;
+using System.Security.Claims;
+using IspProject.Services.Account;
 
 namespace IspProject.Controllers
 {
@@ -14,10 +18,12 @@ namespace IspProject.Controllers
     public class AccountController : ControllerBase
     {
         private readonly AccountDbContext _context;
+        private readonly IAccountService _accountService;
 
-        public AccountController(AccountDbContext context)
+        public AccountController(AccountDbContext context, IAccountService accountService)
         {
             _context = context;
+            _accountService = accountService;
         }
 
         // GET: api/Account
@@ -113,6 +119,20 @@ namespace IspProject.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
+        }
+
+        [HttpGet]
+        [Route("getinfo")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<ActionResult<GetAccountInfoResponse>> GetAccountInfo()
+        {
+            var user = HttpContext.User;
+            var nameIdentifier = int.Parse(user.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value);
+
+            var response = await _accountService.GetAccountInfo(nameIdentifier);
+            return Ok(response);
         }
 
         private bool AccountExists(int id)

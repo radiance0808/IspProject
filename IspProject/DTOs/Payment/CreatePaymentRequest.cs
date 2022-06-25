@@ -6,7 +6,6 @@ namespace IspProject.DTOs.Payment
     {
         [Required]
         public double amount { get; set; }
-        [Required]
-        public DateTime date { get; set; }
+        
     }
 }
