@@ -11,6 +11,7 @@ import { UserContextProvider } from "./components/store/UserContext";
 
 import Layout from "./components/UI/Helpers/Layout/Layout";
 import PageGuard from "./components/UI/HomePageUI/PageGuard/PageGuard";
+import Payments from "./components/UI/UserProfile/PaymentHistory/Payments";
 import Profile from "./components/UI/UserProfile/Profile/Profile";
 import Statistics from "./components/UI/UserProfile/Statistics/Statistics";
 import Support from "./components/UI/UserProfile/Support/Support";
@@ -55,6 +56,11 @@ function App() {
             <Route path="/profile/support" exact>
               {!authCtx.isLogged && <Redirect to="/login" />}
               {authCtx.isLogged && authCtx.UserIsClient && <Support />}
+              {authCtx.isLogged && !authCtx.UserIsClient && <PageGuard />}
+            </Route>
+            <Route path="/profile/payments" exact>
+              {!authCtx.isLogged && <Redirect to="/login" />}
+              {authCtx.isLogged && authCtx.UserIsClient && <Payments />}
               {authCtx.isLogged && !authCtx.UserIsClient && <PageGuard />}
             </Route>
           </UserContextProvider>

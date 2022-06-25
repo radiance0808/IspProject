@@ -12,11 +12,12 @@ const Tariffs = (props) => {
       <ul className={classes.product__cards}>
       {props.tariffs && props.tariffs.map((tariffs) => (
             <Tariff
-              key={tariffs.tariff_id}
+              key={tariffs.id}
               tariff_id={tariffs.tariff_id}
               name={tariffs.name}
               price={tariffs.price}
               speed={tariffs.speed}
+              isConnected={tariffs.isConnected}
             />
           ))}
           </ul>

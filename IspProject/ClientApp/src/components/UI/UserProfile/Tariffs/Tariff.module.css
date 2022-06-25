@@ -23,6 +23,18 @@
   border-radius: 2px;
   font-size: 18px;
 }
+.card button:disabled {
+  border: none;
+  outline: 0;
+  padding: 12px;
+  color: black;
+  background-color: grey;
+  text-align: center;
+  cursor:not-allowed;
+  width: fit-content;
+  border-radius: 2px;
+  font-size: 18px;
+}
 .card button:hover {
   opacity: 0.7;
 }

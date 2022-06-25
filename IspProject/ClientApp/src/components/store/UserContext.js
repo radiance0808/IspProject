@@ -20,7 +20,6 @@ export const UserContextProvider = (props) => {
   const [plan, setPlan] = useState("");
   const [isActive, setIsActive] = useState(null);
   const [paymentHistory, setPaymentHistory] = useState([]);
-  const updateBalanceHandler = () => {};
   const freezeAccountHandler = () => {};
   const loadDataHandler = (
     balance,
@@ -29,13 +28,16 @@ export const UserContextProvider = (props) => {
     plan,
     isActive
   ) => {
-    console.log("putting");
     setBalance(balance);
     setNotifications(notifications);
     setEquipment(equipment);
     setPlan(plan);
     setIsActive(isActive);
   };
+
+  const loadPaymentHistory = (payments) => {
+    setPaymentHistory(payments);
+  }
 
   const contextValue = {
     balance: balance,
@@ -44,12 +46,11 @@ export const UserContextProvider = (props) => {
     plan: plan,
     isActive: isActive,
     paymentHistory: paymentHistory,
-    updateBalance: updateBalanceHandler,
     freezeAccount: freezeAccountHandler,
     loadData: loadDataHandler,
+    loadPaymentHistory: loadPaymentHistory,
   };
 
-  const updateBalance = (value) => {};
   return (
     <UserContext.Provider value={contextValue}>
       {props.children}

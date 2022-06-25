@@ -22,43 +22,30 @@ function removeFirstWord(str) {
   return str.substring(indexOfSpace + 1);
 }
 
+
 const Profile = () => {
   const userCtx = useContext(UserContext);
   const authCtx = useContext(AuthContext);
 
-  const [payments, setPayments] = useState(userCtx.paymentHistory);
+  function isConnected(name){
+    if(!name){
+      return;
+    }
+    if(name === userCtx.plan){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
+  const [payments, setPayments] = useState();
   const [tariffs, setTariffs] = useState();
   const [services, setServices] = useState();
+  const [equipment, setEquipment] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [Error, setError] = useState();
 
-  useEffect(() => {
-    const fetchTariffs = async () => {
-      const response = await fetch("https://localhost:7012/api/Package");
-      if (!response.ok) {
-        throw new Error("Something went wrong!");
-      }
-      const responseData = await response.json();
-
-      const loadedTariffs = [];
-      for (const key in responseData) {
-        loadedTariffs.push({
-          id: key,
-          tariff_id: responseData[key].tariff_id,
-          name: responseData[key].nameOfPackage,
-          price: responseData[key].price,
-          speed: removeFirstWord(responseData[key].nameOfPackage),
-        });
-      }
-
-      setTariffs(loadedTariffs);
-      setIsLoading(false);
-    };
-    fetchTariffs().catch((error) => {
-      setIsLoading(false);
-      setError(error.message);
-    });
-  }, []);
+  
   useEffect(() => {
     const fetchAdditionalServices = async () => {
       const response = await fetch(
@@ -86,9 +73,33 @@ const Profile = () => {
       setError(error.message);
     });
   }, []);
-   useEffect(() => {
+  useEffect(() => {
+    const fetchEquipment = async () => {
+      const response = await fetch("https://localhost:7012/api/Equipment");
+      if (!response.ok) {
+        throw new Error("Something went wrong!");
+      }
+      const responseData = await response.json();
+
+      const loadedEquipment = [];
+      for (const key in responseData) {
+        loadedEquipment.push({
+          id: key,
+          idEquipment: responseData[key].idEquipment,
+          routerName: responseData[key].routerName,
+          description: responseData[key].description,
+        });
+      }
+      setEquipment(loadedEquipment);
+    };
+    fetchEquipment().catch((error) => {
+      setIsLoading(false);
+      setError(error.message);
+    });
+  }, []);
+  useEffect(() => {
     const fetchUserData = async () => {
-      let url = 'https://localhost:7012/api/account/getinfo';
+      let url = "https://localhost:7012/api/account/getinfo";
       const response = await fetch(url, {
         method: "GET",
         headers: new Headers({
@@ -99,7 +110,6 @@ const Profile = () => {
         throw new Error("Something went wrong!");
       }
       const responseData = await response.json();
-      console.log(responseData);
       userCtx.loadData(
         responseData.balance,
         responseData.notificationType,
@@ -107,9 +117,39 @@ const Profile = () => {
         responseData.package,
         responseData.isActive
       );
+    };
+    fetchUserData().catch((error) => {
+      setIsLoading(false);
+      setError(error.message);
+    });
+  }, []);
+  useEffect(() => {
+    const fetchUserData = async () => {
+      let url = "https://localhost:7012/api/Payment";
+      const response = await fetch(url, {
+        method: "GET",
+        headers: new Headers({
+          Authorization: "Bearer " + authCtx.token,
+        }),
+      });
+      if (!response.ok) {
+        throw new Error("Something went wrong!");
+      }
 
-      
+      const responseData = await response.json();
 
+      const loadedPayments = [];
+      for (const key in responseData) {
+        loadedPayments.push({
+          id: key,
+          idPayment: responseData[key].idPayment,
+          amount: responseData[key].amount,
+          date: responseData[key].date,
+        });
+
+        setPayments(loadedPayments);
+        userCtx.loadPaymentHistory(payments);
+      }
     };
     fetchUserData().catch((error) => {
       setIsLoading(false);
@@ -117,45 +157,34 @@ const Profile = () => {
     });
   }, []);
 
-  // useEffect(() => {
-  //   const fetchUserData = async () => {
-  //     let url = "https://localhost:7012/api/account/getinfo";
-  //     await fetch(url, {
-  //       method: "GET",
-  //       headers: new Headers({
-  //         Authorization: "Bearer " + userCtx.token,
-  //       }),
-  //     })
-  //       .then((res) => {
-  //         setIsLoading(false);
-  //         if (res.ok) {
-  //           return res.json();
-  //         } else {
-  //           return res.json().then((data) => {
-  //             let errorMessage = "Authentication failed!";
-  //             // if (data && data.error && data.error.message) {
-  //             //   errorMessage = data.error.message;
-  //             // }
+  useEffect(() => {
+    const fetchTariffs = async () => {
+      const response = await fetch("https://localhost:7012/api/Package");
+      if (!response.ok) {
+        throw new Error("Something went wrong!");
+      }
+      const responseData = await response.json();
 
-  //             throw new Error(errorMessage);
-  //           });
-  //         }
-  //       })
-  //       .then((data) => {
-  //         console.log(data);
-  //         userCtx.loadData(
-  //           data.balance,
-  //           data.notificationType,
-  //           data.equipment,
-  //           data.package,
-  //           data.isActive
-  //         );
-  //       });
-  //     fetchUserData.catch((err) => {
-  //       alert(err.message);
-  //     });
-  //   };
-  // }, []);
+      const loadedTariffs = [];
+      for (const key in responseData) {
+        loadedTariffs.push({
+          id: key,
+          tariff_id: responseData[key].tariff_id,
+          name: responseData[key].nameOfPackage,
+          price: responseData[key].price,
+          speed: removeFirstWord(responseData[key].nameOfPackage),
+          isConnected: isConnected(responseData[key].nameOfPackage),
+        });
+      }
+
+      setTariffs(loadedTariffs);
+      setIsLoading(false);
+    };
+    fetchTariffs().catch((error) => {
+      setIsLoading(false);
+      setError(error.message);
+    });
+  }, []);
 
   if (Error) {
     return (
@@ -167,13 +196,13 @@ const Profile = () => {
 
   return (
     <Fragment>
-      <Balance balance={userCtx.balance}/>
+      {!isLoading && <Balance />}
       {isLoading && <p>Loading...</p>}
       {!isLoading && <Tariffs tariffs={tariffs} />}
       {!isLoading && <Services services={services} />}
       <Controls />
       <Notifications />
-      <Equipment />
+      <Equipment equipment={equipment} />
       <Payments payments={payments} />
     </Fragment>
   );

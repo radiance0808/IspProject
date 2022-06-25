@@ -1,18 +1,17 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import classes from "./Tariff.module.css";
 
-// function removeFirstWord(str) {
-//   const indexOfSpace = str.indexOf(" ");
+import UserContext from "../../../store/UserContext";
 
-//   if (indexOfSpace === -1) {
-//     return "";
-//   }
-
-//   return str.substring(indexOfSpace + 1);
-// }
 
 const Tariff = (props) => {
+
+  const userCtx = useContext(UserContext);
+
+
+
+
   return (
     <div className={classes.card}>
       <h1>{props.name}</h1>
@@ -21,6 +20,7 @@ const Tariff = (props) => {
 
       <p>
         <button
+        disabled={props.isConnected}
           onClick={() => {
             //TODO send connection request to administrator with userID and service that user would like to connect
           }}

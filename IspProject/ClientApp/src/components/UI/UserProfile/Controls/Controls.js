@@ -31,8 +31,15 @@ const Controls = () => {
             history.push("/profile/support");
           }}
         >
+          
           Support
         </button>
+        <button
+          className={classes.button}
+          onClick={() => {
+            history.push("/profile/payments");
+          }}
+        >Show All Payments</button>
       </div>
     </div>
   );
