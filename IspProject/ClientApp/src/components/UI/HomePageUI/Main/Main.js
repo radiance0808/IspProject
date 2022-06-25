@@ -5,8 +5,6 @@ import chat from "../../../../gallery/chat.svg";
 import man from "../../../../gallery/man.svg";
 import Form from "../Form/Form";
 import Tariffs from "../Plans/Tariffs";
-import axios from "axios";
-
 
 function removeFirstWord(str) {
   if (!str) {
@@ -22,20 +20,23 @@ function removeFirstWord(str) {
 }
 
 const Main = () => {
-
-
   const [packages, setPackages] = useState();
   const [typeOfHouses, setTypeOfHouses] = useState();
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState();
   const [Error, setError] = useState();
 
-  // useEffect(() => {
+  useEffect(() => {
     const fetchTariffs = async () => {
+      setIsLoading(true);
       const response = await fetch("https://localhost:7012/api/Package");
       if (!response.ok) {
         throw new Error("Something went wrong!");
+        return;
       }
       const responseData = await response.json();
+      if (!responseData) {
+        return;
+      }
 
       const loadedTariffs = [];
       for (const key in responseData) {
@@ -47,21 +48,22 @@ const Main = () => {
           speed: removeFirstWord(responseData[key].nameOfPackage),
         });
       }
+        setPackages(loadedTariffs);
 
-      setPackages(loadedTariffs);
-      
     };
     fetchTariffs().catch((error) => {
       setIsLoading(false);
       setError(error.message);
     });
-  // }, []);
+  }, []);
 
-  // useEffect(() => {
+  useEffect(() => {
     const fetchTypeOfHouses = async () => {
+      setIsLoading(true);
       const response = await fetch("https://localhost:7012/api/TypeOfHouse");
       if (!response.ok) {
         throw new Error("Something went wrong!");
+        return;
       }
       const responseData = await response.json();
       const loadedTypesOfHouse = [];
@@ -73,15 +75,15 @@ const Main = () => {
         });
       }
 
-      setTypeOfHouses(loadedTypesOfHouse);
-      setIsLoading(false);
+        setTypeOfHouses(loadedTypesOfHouse);
+        setIsLoading(false);
     };
     fetchTypeOfHouses().catch((error) => {
       setIsLoading(false);
       setError(error.message);
+      console.log(error.message);
     });
-  // }, []);
-
+  }, []);
 
   if (Error) {
     return (
@@ -92,7 +94,6 @@ const Main = () => {
   }
 
   return (
-    
     <Fragment>
       <section className={classes.starting} href="#main" id="main">
         <h1>We connect people around Poland</h1>
@@ -156,7 +157,6 @@ const Main = () => {
         </div>
       </section>
       <section className={classes.plans} href="#plans" id="plans">
-
         {!isLoading && <Tariffs tariffs={packages} />}
         {isLoading && <p>Please wait...</p>}
       </section>

@@ -1,18 +1,20 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import classes from "./Form.module.css";
 import useInput from "../../../hooks/use-input-form";
 import ErrorHandlerModal from "../../Helpers/ErrorHandler/ErrorHandlerModal";
+import { useHistory } from "react-router-dom";
 
 const Form = (props) => {
-  const [enteredPlan, setEnteredPlan] = useState(null);
+  const [enteredPackage, setEnteredPackage] = useState();
   const [enteredPlanIsValid, setEnteredPlanIsValid] = useState(false);
-  const [enteredHouseType, setEnteredHouseType] = useState(null);
+  const [enteredTypeOfHouse, setEnteredTypeOfHouse] = useState();
   const [enteredHouseTypeIsValid, setEnteredHouseTypeIsValid] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [housesLoaded, setHousesLoaded] = useState(true);
-  const [packagesLoaded, setPackagesLoaded] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+
   const [isPostDataError, setIsPostDataError] = useState(false);
+  const history = useHistory();
 
   let formIsValid = false;
 
@@ -64,12 +66,6 @@ const Form = (props) => {
   ) {
     formIsValid = true;
   }
-  if(!props.tariffs){
-    setPackagesLoaded(false);
-  }
-  if(!props.typeOfHouses){
-    setHousesLoaded(false);
-  }
 
   const errorHandler = () => {
     setShowErrorModal(false);
@@ -83,46 +79,58 @@ const Form = (props) => {
   const formSubmitHandler = (event) => {
     event.preventDefault();
     if (!formIsValid) {
-    setShowErrorModal(true);
+      setShowErrorModal(true);
+      return;
     }
 
     if (formIsValid) {
-      const axios = require('axios');
-      axios.post('https://localhost:7012/api/adress', {
-        address: {enteredAddress},
-        idTypeOfHouse: {enteredHouseType}
+      let url = "https://localhost:7012/api/PotentialClient"
+      fetch(url, {
+        method: "POST",
+        body: JSON.stringify({
+          name: enteredName,
+          phoneNumber: enteredPhone,
+          address: enteredAddress,
+          email: enteredEmail,
+          idPackage: enteredPackage,
+          idTypeOfHouse: enteredTypeOfHouse
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
       })
-      .then(function (response) {
-        
-      })
-      .catch(function (error) {
-        setIsPostDataError(true);
-        return;
-      });
-      axios.post('https://localhost:7012/api/adress', {
-        address: {enteredAddress},
-        idTypeOfHouse: {enteredHouseType}
-      })
-      .then(function (response) {
-        
-      })
-      .catch(function (error) {
-        setIsPostDataError(true);
-        return;
-      });
-      resetAllInputs();
-      setShowSuccessModal(true);
+        .then((res) => {
+          setIsLoading(false);
+          if (res.ok) {
+            return res.json();
+          } else {
+            return res.json().then((data) => {
+              let errorMessage = "Authentication failed!";
+              // if (data && data.error && data.error.message) {
+              //   errorMessage = data.error.message;
+              // }
+  
+              throw new Error(errorMessage);
+            });
+          }
+        })
+        .then((data) => {
+          setShowSuccessModal(true);
+        })
+        .catch((err) => {
+          alert(err.message);
+        });
     }
-
     return;
   };
 
+  
   const planChangeHandler = (event) => {
-    setEnteredPlan(event.target.value);
+    setEnteredPackage(event.target.value);
     setEnteredPlanIsValid(true);
   };
   const houseTypeChangeHandler = (event) => {
-    setEnteredHouseType(event.target.value);
+    setEnteredTypeOfHouse(event.target.value);
     setEnteredHouseTypeIsValid(true);
   };
   const resetAllInputs = () => {
@@ -148,9 +156,9 @@ const Form = (props) => {
       )}
       {isPostDataError && (
         <ErrorHandlerModal
-        data="The data has been sent successfully!"
-        onConfirm={successHandler}
-      />
+          data="The data has been sent successfully!"
+          onConfirm={errorHandler}
+        />
       )}
       <div className={classes.form__text}>
         <h1>Would you like to connect?</h1>
@@ -204,21 +212,23 @@ const Form = (props) => {
             {phoneHasError && <p>Please provide correct phone number.</p>}
           </div>
           {props.typeOfHouses &&
-          props.typeOfHouses.map((typeOfHouse) => (
-            <div className={classes.form__radio} key={typeOfHouse.idTypeOfHouse}>
-              <input
-                id={typeOfHouse.typeOfHouse}
-                type="radio"
-                name="typeOfHouse"
-                value={typeOfHouse.idTypeOfHouse}
-                onChange={houseTypeChangeHandler}
-              />
-              <label htmlFor={typeOfHouse.typeOfHouse}>
-                {typeOfHouse.typeOfHouse}
-              </label>
-            </div>
-          ))}
-          {!housesLoaded && <p>Seems there is a problem from our side. Please try again</p>}
+            props.typeOfHouses.map((typeOfHouse) => (
+              <div
+                className={classes.form__radio}
+                key={typeOfHouse.idTypeOfHouse}
+              >
+                <input
+                  id={typeOfHouse.idTypeOfHouse}
+                  type="radio"
+                  name="typeOfHouse"
+                  value={typeOfHouse.idTypeOfHouse}
+                  onChange={houseTypeChangeHandler}
+                />
+                <label htmlFor={typeOfHouse.typeOfHouse}>
+                  {typeOfHouse.typeOfHouse}
+                </label>
+              </div>
+            ))}
           <div className={classes.form__input__group}>
             <b>Address</b>
             <input
@@ -242,19 +252,18 @@ const Form = (props) => {
                 id={tariff.nameOfPackage}
                 type="radio"
                 name="package"
-                value={tariff.nameOfPackage}
+                value={tariff.tariff_id}
                 onChange={planChangeHandler}
               />
-              <label htmlFor={tariff.nameOfPackage} >
+              <label htmlFor={tariff.nameOfPackage}>
                 {tariff.nameOfPackage}
               </label>
             </div>
           ))}
-          {!packagesLoaded && <p>Seems there is a problem from our side. Please try again</p>}
-
         <div className={classes.form__submit}>
           <button onClick={formSubmitHandler}>Submit</button>
         </div>
+        {isLoading && <p>Loading...</p>}
       </form>
     </div>
   );
