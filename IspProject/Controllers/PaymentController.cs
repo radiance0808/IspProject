@@ -89,12 +89,12 @@ namespace IspProject.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<Payment>> CreatePotentialClient(CreatePaymentRequest request)
+        public async Task<ActionResult<Payment>> CreatePayment(CreatePaymentRequest request)
         {
             var user = HttpContext.User;
             var nameIdentifier = int.Parse(user.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value);
             var response = await _paymentService.CreatePayment(request, nameIdentifier);
-            return CreatedAtAction(nameof(CreatePotentialClient), response);
+            return CreatedAtAction(nameof(CreatePayment), response);
         }
 
         // DELETE: api/Payment/5
