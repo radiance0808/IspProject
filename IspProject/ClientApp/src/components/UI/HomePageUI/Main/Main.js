@@ -29,7 +29,7 @@ const Main = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [Error, setError] = useState();
 
-  useEffect(() => {
+  // useEffect(() => {
     const fetchTariffs = async () => {
       const response = await fetch("https://localhost:7012/api/Package");
       if (!response.ok) {
@@ -55,9 +55,9 @@ const Main = () => {
       setIsLoading(false);
       setError(error.message);
     });
-  }, []);
+  // }, []);
 
-  useEffect(() => {
+  // useEffect(() => {
     const fetchTypeOfHouses = async () => {
       const response = await fetch("https://localhost:7012/api/TypeOfHouse");
       if (!response.ok) {
@@ -80,7 +80,7 @@ const Main = () => {
       setIsLoading(false);
       setError(error.message);
     });
-  }, []);
+  // }, []);
 
 
   if (Error) {
