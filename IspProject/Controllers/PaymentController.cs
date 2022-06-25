@@ -94,7 +94,7 @@ namespace IspProject.Controllers
             var user = HttpContext.User;
             var nameIdentifier = int.Parse(user.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value);
             var response = await _paymentService.CreatePayment(request, nameIdentifier);
-            return CreatedAtAction(nameof(CreatePayment), response);
+            return CreatedAtAction(nameof(CreatePayment), response); 
         }
 
         // DELETE: api/Payment/5
