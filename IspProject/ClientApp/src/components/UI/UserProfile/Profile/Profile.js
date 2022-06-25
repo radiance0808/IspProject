@@ -80,46 +80,82 @@ const Profile = () => {
       }
 
       setServices(loadedAdditionalServices);
-      setIsLoading(false);
     };
     fetchAdditionalServices().catch((error) => {
       setIsLoading(false);
       setError(error.message);
     });
   }, []);
-  useEffect(() => {
+   useEffect(() => {
     const fetchUserData = async () => {
-      let url = "https://localhost:7012/api/account/getinfo";
-      fetch(url, {
-        method: "POST",
+      let url = 'https://localhost:7012/api/account/getinfo';
+      const response = await fetch(url, {
+        method: "GET",
         headers: new Headers({
-          Authorization: "Bearer " + userCtx.token,
-          "Content-Type": "application/x-www-form-urlencoded",
+          Authorization: "Bearer " + authCtx.token,
         }),
-      })
-        .then((res) => {
-          setIsLoading(false);
-          if (res.ok) {
-            return res.json();
-          } else {
-            return res.json().then((data) => {
-              let errorMessage = "Authentication failed!";
-              // if (data && data.error && data.error.message) {
-              //   errorMessage = data.error.message;
-              // }
+      });
+      if (!response.ok) {
+        throw new Error("Something went wrong!");
+      }
+      const responseData = await response.json();
+      console.log(responseData);
+      userCtx.loadData(
+        responseData.balance,
+        responseData.notificationType,
+        responseData.equipment,
+        responseData.package,
+        responseData.isActive
+      );
 
-              throw new Error(errorMessage);
-            });
-          }
-        })
-        .then((data) => {
-          console.log(data);
-        })
-        .catch((err) => {
-          alert(err.message);
-        });
+      
+
     };
-  });
+    fetchUserData().catch((error) => {
+      setIsLoading(false);
+      setError(error.message);
+    });
+  }, []);
+
+  // useEffect(() => {
+  //   const fetchUserData = async () => {
+  //     let url = "https://localhost:7012/api/account/getinfo";
+  //     await fetch(url, {
+  //       method: "GET",
+  //       headers: new Headers({
+  //         Authorization: "Bearer " + userCtx.token,
+  //       }),
+  //     })
+  //       .then((res) => {
+  //         setIsLoading(false);
+  //         if (res.ok) {
+  //           return res.json();
+  //         } else {
+  //           return res.json().then((data) => {
+  //             let errorMessage = "Authentication failed!";
+  //             // if (data && data.error && data.error.message) {
+  //             //   errorMessage = data.error.message;
+  //             // }
+
+  //             throw new Error(errorMessage);
+  //           });
+  //         }
+  //       })
+  //       .then((data) => {
+  //         console.log(data);
+  //         userCtx.loadData(
+  //           data.balance,
+  //           data.notificationType,
+  //           data.equipment,
+  //           data.package,
+  //           data.isActive
+  //         );
+  //       });
+  //     fetchUserData.catch((err) => {
+  //       alert(err.message);
+  //     });
+  //   };
+  // }, []);
 
   if (Error) {
     return (
@@ -131,7 +167,7 @@ const Profile = () => {
 
   return (
     <Fragment>
-      <Balance />
+      <Balance balance={userCtx.balance}/>
       {isLoading && <p>Loading...</p>}
       {!isLoading && <Tariffs tariffs={tariffs} />}
       {!isLoading && <Services services={services} />}
