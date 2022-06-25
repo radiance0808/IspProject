@@ -1,10 +1,157 @@
-.wrapper{
-    padding-top: 30px;
-    padding-bottom: 120px;
-    box-sizing: content-box;
-    display: block;
-    background-color: white;
+.container {
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0;
+  width: 100%;
+  background-color: white;
+  padding-top: 70px;
+  box-sizing: content-box;
 }
-.wrapper h1{
+.container h1{
     text-align: center;
+}
+.wrapper {
+  width: 100%;
+  background-color: white;
+  height: 200px;
+}
+.container__columns {
+  display: inline;
+  float: left;
+  margin-right: 20px;
+  padding-left: 100px;
+  background-color: white;
+  padding-right: 50px;
+}
+.inputs {
+  display: table-cell;
+  transition: max-height 0.3s cubic-bezier(0.19, 1, 0.22, 1),
+    opacity 0.3s linear;
+  max-height: 5000px;
+  width: 400px;
+}
+
+.input {
+  padding-bottom: 5px;
+  display: block;
+  vertical-align: middle;
+  height: 100%;
+  padding-right: 10px;
+  font-size: 20px;
+  line-height: 1.55;
+  font-weight: 500;
+  color: #000000;
+}
+.input__title {
+  margin-top: -5px;
+  padding-bottom: 10px;
+  display: block;
+  vertical-align: middle;
+  height: 100%;
+  padding-right: 10px;
+  font-size: 16px;
+  line-height: 1.55;
+  font-weight: 300;
+  color: #000000;
+}
+.input__form {
+  height: 100%;
+  width: 100%;
+  padding-right: 80px;
+  box-sizing: border-box;
+  position: relative;
+}
+.input__form input {
+  color: #000000;
+  border: 1px solid #000000;
+  margin: 0;
+  font-size: 100%;
+  height: 60px;
+  padding: 0 20px;
+  font-size: 16px;
+  line-height: 1.33;
+  width: 100%;
+  outline: 0;
+  border-radius: 0;
+}
+.input__form select {
+  color: #000000;
+  border: 1px solid #000000;
+  width: 100%;
+  box-sizing: border-box;
+  cursor: pointer;
+  height: 60px;
+  padding: 0 45px 0 20px;
+  font-size: 16px;
+  line-height: 1.33;
+  outline: 0;
+  border-radius: 0;
+  background: 0 0;
+}
+.submit{
+    display: table-cell;
+    vertical-align: bottom;
+    height: 100%;
+}
+.submit button{
+    color:#ffffff;
+    background-color: #000000;
+    position: relative;
+    text-align: center;
+    height: 60px;
+    border: 0 none;
+    font-size: 16px;
+    padding-left: 60px;
+    padding-right: 60px;
+    -webkit-appearance: none;
+    font-weight: 700;
+    white-space: nowrap;
+    background-image: none;
+    cursor: pointer;
+    margin: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    outline: 0;
+}
+@media screen and (max-width: 960px) {
+  .inputs {
+    display: block;
+    width: 100% !important;
+    vertical-align: bottom;
+    margin-bottom: 25px;
+    padding-right: 0px;
+  }
+  .input {
+    display: block;
+    width: 100%;
+    margin-bottom: 25px;
+    padding-right: 0px;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .wrapper {
+    width: 100%;
+    background-color: white;
+    height: 400px;
+  }
+  .input__form {
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    position: relative;
+  }
+  .input__form input {
+    padding: 0;
+  }
+  .container__columns {
+    display: inline;
+    float: left;
+    margin-right: 20px;
+    padding-left: 50px;
+    background-color: white;
+    padding-right: 50px;
+    width: 100%;
+  }
 }
