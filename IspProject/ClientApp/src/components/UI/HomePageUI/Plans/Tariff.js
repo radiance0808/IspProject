@@ -2,20 +2,6 @@ import React from "react";
 
 import classes from "./Tariff.module.css";
 
-function removeFirstWord(str) {
-  if (!str) {
-    console.log("MT");
-    return;
-  }
-  const indexOfSpace = str.indexOf(" ");
-
-  if (indexOfSpace === -1) {
-    return "";
-  }
-
-  return str.substring(indexOfSpace + 1);
-}
-
 const Tariff = (props) => {
   return (
     <div className={classes.card}>

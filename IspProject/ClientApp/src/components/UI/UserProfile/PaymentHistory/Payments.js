@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useContext } from "react";
-import AuthContext from "../../../store/AuthContext";
-import UserContext, { UserContextProvider } from "../../../store/UserContext";
+import React from "react";
+
 import Payment from "./Payment";
 import classes from "./Payments.module.css";
 

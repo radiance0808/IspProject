@@ -1,16 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
+import React from "react";
 
 import classes from "./Tariff.module.css";
 
-import UserContext from "../../../store/UserContext";
-
 
 const Tariff = (props) => {
-
-  const userCtx = useContext(UserContext);
-
-
-
 
   return (
     <div className={classes.card}>

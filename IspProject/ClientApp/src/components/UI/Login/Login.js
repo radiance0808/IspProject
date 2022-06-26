@@ -1,4 +1,4 @@
-import React, { useRef, useContext, useState, useEffect } from "react";
+import React, { useRef, useContext, useState} from "react";
 import { useHistory } from "react-router-dom";
 import classes from "./Login.module.css";
 import AuthContext from "../../store/AuthContext";
@@ -67,7 +67,7 @@ const Login = () => {
           history.replace("/profile")
         }
         else{
-          console.log("Something went wrong.")
+
           history.replace("/");
         }
 

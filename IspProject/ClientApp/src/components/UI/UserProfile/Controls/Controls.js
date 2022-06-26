@@ -1,7 +1,6 @@
 import { useHistory } from "react-router-dom";
 import React from "react";
 import classes from "./Controls.module.css";
-import { Redirect } from "react-router-dom";
 
 const Controls = () => {
   const history = useHistory();

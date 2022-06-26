@@ -1,6 +1,5 @@
-import React, { useContext } from "react";
+import React from "react";
 import { useState } from "react/cjs/react.development";
-import AuthContext from "./AuthContext";
 
 const UserContext = React.createContext({
   balance: 0,

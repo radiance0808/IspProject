@@ -9,7 +9,6 @@ const PaymentList = () => {
 
   const authCtx = useContext(AuthContext);
   const userCtx = useContext(UserContext);
-  const [isLoading, setIsLoading] = useState(true);
   const [Error, setError] = useState();
   const loadedPayments = [];
 
@@ -38,10 +37,8 @@ const PaymentList = () => {
       }
       setPayments(loadedPayments);
       userCtx.loadPaymentHistory(loadedPayments);
-      setIsLoading(false);
     };
     fetchUserData().catch((error) => {
-      setIsLoading(false);
       setError(error.message);
     });
   }, []);

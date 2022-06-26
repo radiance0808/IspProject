@@ -12,8 +12,6 @@ import { UserContextProvider } from "./components/store/UserContext";
 import Layout from "./components/UI/Helpers/Layout/Layout";
 import PageGuard from "./components/UI/HomePageUI/PageGuard/PageGuard";
 import PaymentList from "./components/UI/UserProfile/PaymentHistory/PaymentList";
-import Payments from "./components/UI/UserProfile/PaymentHistory/Payments";
-import Profile from "./components/UI/UserProfile/Profile/Profile";
 import Statistics from "./components/UI/UserProfile/Statistics/Statistics";
 import Support from "./components/UI/UserProfile/Support/Support";
 import Topup from "./components/UI/UserProfile/TopUp/Topup";
