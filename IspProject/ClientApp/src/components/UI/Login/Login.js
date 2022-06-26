@@ -73,10 +73,9 @@ const Login = () => {
 
       })
       .catch((err) => {
-        console.log(err);
-            if(err === "Failed to fetch"){
-              setError("The server is not responding now. Please try again later.")
-            }
+        if(err.message === "Failed to fetch"){
+          setError("The server is currently unavailable. Please try again later.")
+        } 
             setIsError(true);
       });
   };
