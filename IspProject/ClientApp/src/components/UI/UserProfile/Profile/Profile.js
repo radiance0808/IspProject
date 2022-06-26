@@ -5,9 +5,10 @@ import Services from "../Services/Services";
 import Controls from "../Controls/Controls";
 import Notifications from "../Notifications/Notifications";
 import Equipment from "../Equipment/Equipment";
-import Payments from "../PaymentHistory/Payments";
 import UserContext from "../../../store/UserContext";
 import AuthContext from "../../../store/AuthContext";
+
+import classes from './Profile.module.css';
 
 function removeFirstWord(str) {
   if (!str) {
@@ -22,18 +23,17 @@ function removeFirstWord(str) {
   return str.substring(indexOfSpace + 1);
 }
 
-
 const Profile = () => {
   const userCtx = useContext(UserContext);
   const authCtx = useContext(AuthContext);
 
-  function isConnected(name){
-    if(!name){
+  function isConnected(name) {
+    if (!name) {
       return;
     }
-    if(name === userCtx.plan){
+    if (name === userCtx.plan) {
       return true;
-    }else{
+    } else {
       return false;
     }
   }
@@ -44,14 +44,15 @@ const Profile = () => {
   const [equipment, setEquipment] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [Error, setError] = useState();
+  const [isError, setIsError] = useState(false);
 
-  
   useEffect(() => {
     const fetchAdditionalServices = async () => {
       const response = await fetch(
         "https://localhost:7012/api/AdditionalService"
       );
       if (!response.ok) {
+        setIsError(true);
         throw new Error("Something went wrong!");
       }
       const responseData = await response.json();
@@ -70,6 +71,7 @@ const Profile = () => {
     };
     fetchAdditionalServices().catch((error) => {
       setIsLoading(false);
+      setIsError(true);
       setError(error.message);
     });
   }, []);
@@ -77,6 +79,7 @@ const Profile = () => {
     const fetchEquipment = async () => {
       const response = await fetch("https://localhost:7012/api/Equipment");
       if (!response.ok) {
+        setIsError(true);
         throw new Error("Something went wrong!");
       }
       const responseData = await response.json();
@@ -94,6 +97,7 @@ const Profile = () => {
     };
     fetchEquipment().catch((error) => {
       setIsLoading(false);
+      setIsError(true);
       setError(error.message);
     });
   }, []);
@@ -107,6 +111,7 @@ const Profile = () => {
         }),
       });
       if (!response.ok) {
+        setIsError(true);
         throw new Error("Something went wrong!");
       }
       const responseData = await response.json();
@@ -120,15 +125,16 @@ const Profile = () => {
     };
     fetchUserData().catch((error) => {
       setIsLoading(false);
+      setIsError(true);
       setError(error.message);
     });
   }, []);
-  
 
   useEffect(() => {
     const fetchTariffs = async () => {
       const response = await fetch("https://localhost:7012/api/Package");
       if (!response.ok) {
+        setIsError(true);
         throw new Error("Something went wrong!");
       }
       const responseData = await response.json();
@@ -150,6 +156,7 @@ const Profile = () => {
     };
     fetchTariffs().catch((error) => {
       setIsLoading(false);
+      setIsError(true);
       setError(error.message);
     });
   }, []);
@@ -157,21 +164,24 @@ const Profile = () => {
   if (Error) {
     return (
       <section>
-        <p>{Error}</p>
+        <b>
+          The server is unavailable now. Please try reloading the page or try
+          again later.
+        </b>
       </section>
     );
   }
 
   return (
-    <Fragment>
-      {!isLoading && <Balance />}
+    <div className={classes.loading}>
       {isLoading && <p>Loading...</p>}
+      {!isLoading && <Balance />}
       {!isLoading && <Tariffs tariffs={tariffs} />}
       {!isLoading && <Services services={services} />}
-      <Controls />
-      <Notifications />
-      <Equipment equipment={equipment} />
-    </Fragment>
+      {!isLoading && <Controls />}
+      {!isLoading && <Notifications />}
+      {!isLoading && <Equipment equipment={equipment} />}
+    </div>
   );
 };
 

@@ -15,7 +15,10 @@ const Login = () => {
 
   const [isError, setIsError] = useState(false);
 
+  const [error, setError] = useState();
+
   const errorHandler = () => {
+    setIsLoading(false);
     setIsError(false);
   };
 
@@ -47,6 +50,7 @@ const Login = () => {
           return res.json();
         } else {
           return res.json().then((data) => {
+            setError("The server is not responding now. Please try again later.");
             setIsError(true);
           });
         }
@@ -69,6 +73,10 @@ const Login = () => {
 
       })
       .catch((err) => {
+        console.log(err);
+            if(err === "Failed to fetch"){
+              setError("The server is not responding now. Please try again later.")
+            }
             setIsError(true);
       });
   };
@@ -78,7 +86,7 @@ const Login = () => {
     <React.Fragment>
       {isError && (
         <ErrorHandlerModal
-          data="Authentication failed! Please try again!"
+          data={error}
           onConfirm={errorHandler}
         />
       )}

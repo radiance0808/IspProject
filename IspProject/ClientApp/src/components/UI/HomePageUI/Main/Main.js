@@ -88,7 +88,7 @@ const Main = () => {
   if (Error) {
     return (
       <section className={classes.error}>
-        <p>Seems that server is down. Try reloading page or try again later.</p>
+        <h1>Seems that server is down. Try reloading page or try again later.</h1>
       </section>
     );
   }
