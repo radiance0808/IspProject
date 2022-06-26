@@ -123,39 +123,7 @@ const Profile = () => {
       setError(error.message);
     });
   }, []);
-  useEffect(() => {
-    const fetchUserData = async () => {
-      let url = "https://localhost:7012/api/Payment";
-      const response = await fetch(url, {
-        method: "GET",
-        headers: new Headers({
-          Authorization: "Bearer " + authCtx.token,
-        }),
-      });
-      if (!response.ok) {
-        throw new Error("Something went wrong!");
-      }
-
-      const responseData = await response.json();
-
-      const loadedPayments = [];
-      for (const key in responseData) {
-        loadedPayments.push({
-          id: key,
-          idPayment: responseData[key].idPayment,
-          amount: responseData[key].amount,
-          date: responseData[key].date,
-        });
-
-        setPayments(loadedPayments);
-        userCtx.loadPaymentHistory(payments);
-      }
-    };
-    fetchUserData().catch((error) => {
-      setIsLoading(false);
-      setError(error.message);
-    });
-  }, []);
+  
 
   useEffect(() => {
     const fetchTariffs = async () => {
@@ -203,7 +171,6 @@ const Profile = () => {
       <Controls />
       <Notifications />
       <Equipment equipment={equipment} />
-      <Payments payments={payments} />
     </Fragment>
   );
 };

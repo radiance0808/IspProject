@@ -35,8 +35,8 @@ export const UserContextProvider = (props) => {
     setIsActive(isActive);
   };
 
-  const loadPaymentHistory = (payments) => {
-    setPaymentHistory(payments);
+  const loadPaymentHistory = (paymentHistory) => {
+    setPaymentHistory(paymentHistory);
   }
 
   const contextValue = {
