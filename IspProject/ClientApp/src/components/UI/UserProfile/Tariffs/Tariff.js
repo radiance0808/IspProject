@@ -10,12 +10,11 @@ const Tariff = (props) => {
       <h1>{props.name}</h1>
       <p className={classes.price}>{props.price} zl/month</p>
       <b>{props.speed} MBit/s</b>
-
       <p>
         <button
         disabled={props.isConnected}
           onClick={() => {
-            //TODO send connection request to administrator with userID and service that user would like to connect
+            console.log(props.idPackage)
           }}
         >
           Change
