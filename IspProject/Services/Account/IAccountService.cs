@@ -5,5 +5,7 @@ namespace IspProject.Services.Account
     public interface IAccountService
     {
         Task<GetAccountInfoResponse> GetAccountInfo(int idUser);
+
+        Task ChangePackage(int idUser, int newPackage);
     }
 }

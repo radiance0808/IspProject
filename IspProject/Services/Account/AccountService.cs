@@ -13,6 +13,14 @@ namespace IspProject.Services.Account
             _context = context;
         }
 
+        public async Task ChangePackage(int idUser, int newPackage)
+        {
+            var account = await _context.accounts.FirstOrDefaultAsync(e => e.idUser == idUser);
+            account.idPackage = newPackage;
+
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<GetAccountInfoResponse> GetAccountInfo(int idUser)
         {
             var account = await _context.accounts.FirstOrDefaultAsync(e => e.idUser == idUser);
