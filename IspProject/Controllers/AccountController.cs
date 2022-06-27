@@ -149,6 +149,41 @@ namespace IspProject.Controllers
             return Ok();
         }
 
+        [HttpPut]
+        [Route("changenotificationtype")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> ChangeNotificationType([FromQuery] NotificationType newNotificationType)
+        {
+            var user = HttpContext.User;
+            var nameIdentifier = int.Parse(user.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value);
+
+            await _accountService.ChangeNotificationType(nameIdentifier, newNotificationType);
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("searchaccountsbypackage")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> SearchAccountsByPackage([FromQuery] int idPackage)
+        {
+            
+
+            try
+            {
+                var response = await _accountService.SearchAccountsByPackage(idPackage);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
+
 
         private bool AccountExists(int id)
         {

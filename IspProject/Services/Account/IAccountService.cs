@@ -1,4 +1,5 @@
 ﻿using IspProject.DTOs.Account;
+using IspProject.Models;
 
 namespace IspProject.Services.Account
 {
@@ -6,6 +7,9 @@ namespace IspProject.Services.Account
     {
         Task<GetAccountInfoResponse> GetAccountInfo(int idUser);
 
-        Task ChangePackage(int idUser, int newPackage);
+        Task ChangePackage(int idUser, int newPackage); 
+        Task ChangeNotificationType(int idUser, NotificationType newNotificationType);
+
+        Task<List<SearchAccountsByPackageResponse>> SearchAccountsByPackage(int idPackage);
     }
 }
