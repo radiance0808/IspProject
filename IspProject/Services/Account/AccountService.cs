@@ -47,13 +47,13 @@ namespace IspProject.Services.Account
 
         public async Task<List<SearchAccountsByPackageResponse>> SearchAccountsByPackage(int idPackage)
         {
-            var package = await _context.packages.FirstOrDefaultAsync(p => p.idPackage == idPackage);
+            
             var accounts = await _context.accounts.Where(e => e.idPackage == idPackage).Select(e => new SearchAccountsByPackageResponse
             {
                 idAccount = e.idAccount,
                 firstName = e.user.firstName,
                 lastName = e.user.lastName,
-                packageName = package.nameOfPackage
+                packageName = e.Package.nameOfPackage,
             }).OrderBy(e => e.idAccount).ToListAsync();
             return accounts;
         }
