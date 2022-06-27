@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Balance from "../Balance/Balance";
 import Tariffs from "../Tariffs/Tariffs";
 import Services from "../Services/Services";
@@ -38,7 +38,6 @@ const Profile = () => {
     }
   }
 
-  const [payments, setPayments] = useState();
   const [tariffs, setTariffs] = useState();
   const [services, setServices] = useState();
   const [equipment, setEquipment] = useState();
@@ -143,7 +142,7 @@ const Profile = () => {
       for (const key in responseData) {
         loadedTariffs.push({
           id: key,
-          tariff_id: responseData[key].tariff_id,
+          idPackage: responseData[key].idPackage,
           name: responseData[key].nameOfPackage,
           price: responseData[key].price,
           speed: removeFirstWord(responseData[key].nameOfPackage),
@@ -161,7 +160,7 @@ const Profile = () => {
     });
   }, []);
 
-  if (Error) {
+  if (Error && isError) {
     return (
       <section>
         <b>
