@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useContext, useEffect } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import classes from "./Main.module.css";
 import star from "../../../../gallery/star.svg";
 import chat from "../../../../gallery/chat.svg";
@@ -31,7 +31,7 @@ const Main = () => {
       const response = await fetch("https://localhost:7012/api/Package");
       if (!response.ok) {
         throw new Error("Something went wrong!");
-        return;
+
       }
       const responseData = await response.json();
       if (!responseData) {
@@ -63,7 +63,6 @@ const Main = () => {
       const response = await fetch("https://localhost:7012/api/TypeOfHouse");
       if (!response.ok) {
         throw new Error("Something went wrong!");
-        return;
       }
       const responseData = await response.json();
       const loadedTypesOfHouse = [];
@@ -88,7 +87,7 @@ const Main = () => {
   if (Error) {
     return (
       <section className={classes.error}>
-        <p>Seems that server is down. Try reloading page or try again later.</p>
+        <h1>Seems that server is down. Try reloading page or try again later.</h1>
       </section>
     );
   }

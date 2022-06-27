@@ -1,4 +1,4 @@
-import React, { useRef, useContext, useState, useEffect } from "react";
+import React, { useRef, useContext, useState} from "react";
 import { useHistory } from "react-router-dom";
 import classes from "./Login.module.css";
 import AuthContext from "../../store/AuthContext";
@@ -15,7 +15,10 @@ const Login = () => {
 
   const [isError, setIsError] = useState(false);
 
+  const [error, setError] = useState();
+
   const errorHandler = () => {
+    setIsLoading(false);
     setIsError(false);
   };
 
@@ -47,6 +50,7 @@ const Login = () => {
           return res.json();
         } else {
           return res.json().then((data) => {
+            setError("The server is not responding now. Please try again later.");
             setIsError(true);
           });
         }
@@ -63,12 +67,15 @@ const Login = () => {
           history.replace("/profile")
         }
         else{
-          console.log("Something went wrong.")
+
           history.replace("/");
         }
 
       })
       .catch((err) => {
+        if(err.message === "Failed to fetch"){
+          setError("The server is currently unavailable. Please try again later.")
+        } 
             setIsError(true);
       });
   };
@@ -78,7 +85,7 @@ const Login = () => {
     <React.Fragment>
       {isError && (
         <ErrorHandlerModal
-          data="Authentication failed! Please try again!"
+          data={error}
           onConfirm={errorHandler}
         />
       )}

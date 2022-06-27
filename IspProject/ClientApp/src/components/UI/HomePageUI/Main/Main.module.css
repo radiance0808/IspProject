@@ -159,13 +159,13 @@
   left: 0;
   z-index: -1;
   background-color: white;
-  display: flex;
+  text-align: center;
 }
-.error p{
+.error h1{
   align-items: center;
   vertical-align: middle;
   font-size: x-large;
   text-align: center;
   color: black;
-  padding-top: 70px;
+  padding-top: 85px;
 }

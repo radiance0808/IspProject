@@ -101,7 +101,7 @@ const Support = () => {
             {messageHasError && <p>Please enter a message with the problem.</p>}
           </div>
           <div className={classes.form__submit}>
-            <button type="submit" onclick={ticketSubmitHandler}>Submit</button>
+            <button type="submit" onClick={ticketSubmitHandler}>Submit</button>
           </div>
         </div>
       </form>

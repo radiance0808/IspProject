@@ -2,7 +2,7 @@ import React from "react";
 
 import classes from "./Equipment.module.css";
 
-const Equipment = () => {
+const Equipment = (props) => {
   return (
     <div className={classes.container}>
       <div className={classes.wrapper}>
@@ -14,15 +14,11 @@ const Equipment = () => {
           </a>
           <br />
           <select>
-            <option value="Mikrotik RB952Ui-5ac2nD">
-              Mikrotik RB952Ui-5ac2nD
+          {props.equipment && props.equipment.map((equipment) => (
+            <option key={equipment.id} value={equipment.routerName}>
+              {equipment.routerName}
             </option>
-            <option value="Mikrotik RB2011UIAS-2HND-IN">
-              Mikrotik RB2011UIAS-2HND-IN
-            </option>
-            <option value="Mikrotik RB760iGS HEX S SFP">
-              Mikrotik RB760iGS HEX S SFP
-            </option>
+          ))}
           </select>
           <button type="submit">Confirm</button>
         </form>

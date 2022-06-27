@@ -1,8 +1,7 @@
-import React, { useState, useContext, useEffect, useRef } from "react";
+import React, { useState} from "react";
 import classes from "./Form.module.css";
 import useInput from "../../../hooks/use-input-form";
 import ErrorHandlerModal from "../../Helpers/ErrorHandler/ErrorHandlerModal";
-import { useHistory } from "react-router-dom";
 
 const Form = (props) => {
   const [enteredPackage, setEnteredPackage] = useState();
@@ -14,7 +13,6 @@ const Form = (props) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [isPostDataError, setIsPostDataError] = useState(false);
-  const history = useHistory();
 
   let formIsValid = false;
 
@@ -118,8 +116,10 @@ const Form = (props) => {
           setShowSuccessModal(true);
         })
         .catch((err) => {
-          alert(err.message);
+          console.log(err.message);
+          setIsPostDataError(true);
         });
+        resetAllInputs();
     }
     return;
   };
@@ -156,7 +156,7 @@ const Form = (props) => {
       )}
       {isPostDataError && (
         <ErrorHandlerModal
-          data="The data has been sent successfully!"
+          data="Unavailable to send data. Please try again later."
           onConfirm={errorHandler}
         />
       )}

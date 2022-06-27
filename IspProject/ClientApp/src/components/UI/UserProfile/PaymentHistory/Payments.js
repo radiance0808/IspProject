@@ -1,27 +1,37 @@
 import React from "react";
+
 import Payment from "./Payment";
 import classes from "./Payments.module.css";
 
 const Payments = (props) => {
-  if (props.payments.length === 0) {
-    return <h2 className={classes.h2}>Found no payments.</h2>;
+
+  if (props.isLoading) {
+    return (
+      <section>
+        <p>Loading...</p>
+      </section>
+    );
   }
+
+
+  
 
   return (
     <div className={classes.global}>
       <div className={classes.general}>
-        <h1>Payment history</h1>
+        <h1>Payment History</h1>
       </div>
       <div className={classes.payments}>
         <ul className={classes.payments__list}>
-          {props.payments.map((payments) => (
-            <Payment
-              key={payments.payment_id}
-              payment_id={payments.payment_id}
-              date={payments.date}
-              amount={payments.amount}
-            />
-          ))}
+          {props.payments.length === 0 && <h2 className={classes.h2}>Found no payments.</h2>}
+          {props.payments && props.payments.map((payment) => (
+              <Payment
+                key={payment.id}
+                idPayment={payment.idPayment}
+                date={payment.date}
+                amount={payment.amount}
+              />
+            ))}
         </ul>
       </div>
     </div>

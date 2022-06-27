@@ -1,7 +1,6 @@
 import { useHistory } from "react-router-dom";
 import React from "react";
 import classes from "./Controls.module.css";
-import { Redirect } from "react-router-dom";
 
 const Controls = () => {
   const history = useHistory();
@@ -31,8 +30,15 @@ const Controls = () => {
             history.push("/profile/support");
           }}
         >
+          
           Support
         </button>
+        <button
+          className={classes.button}
+          onClick={() => {
+            history.push("/profile/payments");
+          }}
+        >Show All Payments</button>
       </div>
     </div>
   );
