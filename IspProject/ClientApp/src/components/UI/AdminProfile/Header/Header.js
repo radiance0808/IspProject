@@ -7,7 +7,7 @@ const Header = () => {
         <div className={classes.header__content}>
             <div className={classes.header__adminpanel__container}>
                 <div className={classes.header__adminpanel__content}>
-                    <a>Admin Panel</a>
+                    <a href="/admin">Admin Panel</a>
                 </div>
             </div>
         </div>
