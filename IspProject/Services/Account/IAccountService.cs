@@ -11,5 +11,7 @@ namespace IspProject.Services.Account
         Task ChangeNotificationType(int idUser, NotificationType newNotificationType);
 
         Task<List<SearchAccountsByPackageResponse>> SearchAccountsByPackage(int idPackage);
+
+        Task<CreateAccountResponse> CreateAccount(CreateAccountRequest request);
     }
 }

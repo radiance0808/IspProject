@@ -89,16 +89,13 @@ namespace IspProject.Controllers
         // POST: api/Account
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Account>> PostAccount(Account account)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<ActionResult<Account>> CreateAccount(CreateAccountRequest request)
         {
-          if (_context.accounts == null)
-          {
-              return Problem("Entity set 'AccountDbContext.accounts'  is null.");
-          }
-            _context.accounts.Add(account);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetAccount", new { id = account.idAccount }, account);
+            var response = await _accountService.CreateAccount(request);
+            return CreatedAtAction(nameof(CreateAccount), response);
         }
 
         // DELETE: api/Account/5

@@ -1,4 +1,5 @@
 ﻿using IspProject.DTOs.Account;
+using IspProject.JWT;
 using IspProject.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,6 +30,68 @@ namespace IspProject.Services.Account
             await _context.SaveChangesAsync();
         }
 
+        public async Task<CreateAccountResponse> CreateAccount(CreateAccountRequest request)
+        {
+            var exists = await _context.users.AnyAsync(e => e.login == request.login);
+            if (exists) throw new Exception("Such login exists!");
+
+            var phoneExists = await _context.users.AnyAsync(e => e.phoneNumber == request.phoneNumber);
+            if (phoneExists) throw new Exception("Such phone number exists!");
+
+            var emailExists = await _context.users.AnyAsync(e => e.emailAdress == request.emailAddress);
+            if (emailExists) throw new Exception("Such email address exists!");
+
+            var passportExists = await _context.users.AnyAsync(e => e.passportId == request.passportId);
+            if (passportExists) throw new Exception("Such email address exists!");
+
+            var user = new User()
+            {
+                firstName = request.firstName,
+                lastName = request.lastName,
+                login = request.login,
+                password = request.password,
+                phoneNumber = request.phoneNumber,
+                emailAdress = request.emailAddress,
+                passportId = request.passportId,
+                Role = Roles.client,
+                RefreshToken = ""
+            };
+
+            await _context.users.AddAsync(user);
+
+            var address = new Address()
+            {
+                city = request.city,
+                street = request.street,
+                houseNumber = request.houseNumber,
+                apartmentNumber = request.apartmentNumber,
+                idTypeOfHouse = request.idTypeOfHouse
+            };
+
+            await _context.addresses.AddAsync(address);
+
+            var account = new Models.Account()
+            {
+                user = user,
+                idPackage = request.idPackage,
+                Address = address,
+                balance = 0.0,
+                idEquipment = request.idEquipment,
+                NotificationType = request.notificationType
+
+            };
+
+            await _context.accounts.AddAsync(account);
+            await _context.SaveChangesAsync();
+
+            return new CreateAccountResponse()
+            {
+                login = user.login,
+                password = user.password
+            };
+
+        }
+
         public async Task<GetAccountInfoResponse> GetAccountInfo(int idUser)
         {
             var account = await _context.accounts.FirstOrDefaultAsync(e => e.idUser == idUser);
@@ -39,8 +102,8 @@ namespace IspProject.Services.Account
             {
                 balance = account.balance,
                 notificationType = account.NotificationType.ToString(),
-                equipment = equipment.routerName,
-                package = package.nameOfPackage,
+                equipment = account.Equipment.routerName,
+                package = account.Package.nameOfPackage,
                 isActive = account.isActive
             };
         }
