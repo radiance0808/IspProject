@@ -9,6 +9,7 @@ import UserPage from "./components/pages/UserPage";
 import AuthContext from "./components/store/AuthContext";
 import { UserContextProvider } from "./components/store/UserContext";
 import AdminPackages from "./components/UI/AdminProfile/AdminPackages/AdminPackages";
+import CreateAccount from "./components/UI/AdminProfile/CreateAccount/CreateAccount";
 
 import Layout from "./components/UI/Helpers/Layout/Layout";
 import PageGuard from "./components/UI/HomePageUI/PageGuard/PageGuard";
@@ -31,6 +32,11 @@ function App() {
         {authCtx.isLogged && authCtx.UserIsAdmin && (
           <Route path="/admin/packages" exact>
             <AdminPackages />
+          </Route>
+        )}
+        {authCtx.isLogged && authCtx.UserIsAdmin && (
+          <Route path="/admin/createAccount" exact>
+            <CreateAccount />
           </Route>
         )}
 
