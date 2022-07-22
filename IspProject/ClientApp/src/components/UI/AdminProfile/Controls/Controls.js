@@ -15,6 +15,14 @@ const Controls = () => {
         >
           Show Packages
         </button>
+        <button
+          className={classes.button}
+          onClick={() => {
+            history.push("/admin/createAccount");
+          }}
+        >
+          Create Account
+        </button>
         </div>
     </div>
   );
