@@ -13,5 +13,7 @@ namespace IspProject.Services.Account
         Task<List<SearchAccountsByPackageResponse>> SearchAccountsByPackage(int idPackage);
 
         Task<CreateAccountResponse> CreateAccount(CreateAccountRequest request);
+
+        Task<List<string>> GetNotificationTypes();
     }
 }

@@ -180,7 +180,23 @@ namespace IspProject.Controllers
             }
         }
 
-
+        [HttpGet]
+        [Route("getnotificationtypes")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> GetNotificationTypes()
+        {
+            try
+            {
+                var response = await _accountService.GetNotificationTypes();
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
 
         private bool AccountExists(int id)
         {

@@ -108,6 +108,13 @@ namespace IspProject.Services.Account
             };
         }
 
+        public async Task<List<string>> GetNotificationTypes()
+        {
+            List<string> list = Enum.GetNames(typeof(NotificationType)).ToList();
+
+           return list;
+        }
+
         public async Task<List<SearchAccountsByPackageResponse>> SearchAccountsByPackage(int idPackage)
         {
             
@@ -120,5 +127,7 @@ namespace IspProject.Services.Account
             }).OrderBy(e => e.idAccount).ToListAsync();
             return accounts;
         }
+
+
     }
 }
